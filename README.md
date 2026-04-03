@@ -1,6 +1,6 @@
 # 👻 GhostTrace
 
-> Discover hidden profiles. Trace any username across 50+ platforms.
+> Найди скрытые профили. Проследи любой ник через 50+ платформ.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.0-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.2.4-blue?style=flat-square&logo=react)
@@ -8,138 +8,138 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.2.2-06B6D4?style=flat-square&logo=tailwind-css)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-## Overview
+## Описание
 
-**GhostTrace** is a powerful username reconnaissance tool that helps you find online profiles and accounts associated with a specific username across 50+ popular platforms. Whether you're researching, verifying accounts, or conducting digital investigations, GhostTrace makes it easy to discover where a username exists online.
+**GhostTrace** — это мощный инструмент для поиска профилей и аккаунтов по часто используемому нику. Найди присутствие любого ника на 50+ популярных платформах. Идеален для исследований, верификации аккаунтов и цифровых расследований.
 
-## 🌟 Features
+## 🌟 Возможности
 
-- **Multi-Platform Search**: Search across 50+ platforms including social media, developer networks, gaming platforms, and professional networks
-- **Fast & Efficient**: Real-time search with simulated platform checking for instant results
-- **Smart Categorization**: Organized platform discovery with categories like Social Media, Developer, Gaming, Media, Professional, and Crypto
-- **Beautiful UI**: Modern, responsive interface built with React and Tailwind CSS
-- **Dark Mode Support**: Full dark mode support for comfortable browsing
-- **Real-time Results**: Instant feedback on account availability across platforms
+- **Поиск по 50+ платформам**: Социальные сети, платформы разработчиков, игровые сервисы, профессиональные сети
+- **Быстрый поиск**: Мгновенные результаты с реалистичной имитацией проверила платформ
+- **Умная категоризация**: Организованный поиск профилей по категориям — Социальные сети, Разработка, Игры, Медиа, Профессионально и Крипто
+- **Красивый интерфейс**: Современный и адаптивный дизайн на React и Tailwind CSS
+- **Тёмная тема**: Полная поддержка тёмного режима
+- **Мгновенные результаты**: Реал-тайм информация о доступности аккаунтов
 
-## 📱 Supported Platforms
+## 📱 Поддерживаемые платформы
 
-### Social Media
+### Социальные сети
 Twitter/X, Instagram, TikTok, Facebook, LinkedIn, Reddit, Pinterest, Tumblr
 
-### Developer Platforms
+### Платформы разработчиков
 GitHub, GitLab, Bitbucket, Stack Overflow, Dev.to, CodePen, Replit, npm
 
-### Gaming Platforms
+### Игровые платформы
 Steam, Twitch, Discord, Xbox, PlayStation, Roblox
 
-### Media & Content
+### Медиа и контент
 YouTube, Spotify, SoundCloud, Vimeo, Medium, Substack
 
-### Professional Networks
+### Профессиональные сети
 Dribbble, Behance, Figma, About.me, Linktree
 
-### And more...
+### И многое другое...
 Hacker News, Product Hunt, Quora, Keybase, OpenSea, Gravatar, Patreon, Ko-fi, Buy Me a Coffee
 
-## 🚀 Quick Start
+## 🚀 Быстрый старт
 
-### Prerequisites
+### Требования
 - Node.js 18+ 
-- npm, yarn, pnpm, or bun
+- npm, yarn, pnpm или bun
 
-### Installation
+### Установка
 
-1. **Clone the repository**
+1. **Клонируйте репозиторий**
    ```bash
    git clone https://github.com/GamingHackintosh/GhostTrace.git
    cd GhostTrace
    ```
 
-2. **Install dependencies**
+2. **Установите зависимости**
    ```bash
    npm install
-   # or
+   # или
    pnpm install
    ```
 
-3. **Run the development server**
+3. **Запустите dev сервер**
    ```bash
    npm run dev
-   # or
+   # или
    pnpm dev
    ```
 
-4. **Open in your browser**
+4. **Откройте в браузере**
    ```
    http://localhost:3000
    ```
 
-### Build for Production
+### Сборка для production
 
 ```bash
 npm run build
 npm start
 ```
 
-## 🛠️ Technology Stack
+## 🛠️ Стек технологий
 
-- **Framework**: Next.js 16.2.0 (React 19.2.4)
-- **Language**: TypeScript 5.7.3
-- **Styling**: Tailwind CSS 4.2.2
-- **UI Components**: Shadcn/ui (Radix UI)
-- **Forms**: React Hook Form + Zod
-- **Icons**: Lucide React
-- **Charts**: Recharts
-- **Animations**: Embla Carousel
-- **Themes**: next-themes
+- **Фреймворк**: Next.js 16.2.0 (React 19.2.4)
+- **Язык**: TypeScript 5.7.3
+- **Стили**: Tailwind CSS 4.2.2
+- **UI компоненты**: Shadcn/ui (Radix UI)
+- **Формы**: React Hook Form + Zod
+- **Иконки**: Lucide React
+- **Графики**: Recharts
+- **Анимации**: Embla Carousel
+- **Темы**: next-themes
 
-## 📁 Project Structure
+## 📁 Структура проекта
 
 ```
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   ├── page.tsx           # Home page
-│   ├── layout.tsx         # Root layout
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── ui/               # Shadcn UI components
-│   ├── search-results.tsx # Results display
-│   └── username-search.tsx # Search form
-├── hooks/                # Custom React hooks
-├── lib/                  # Utilities and configurations
-│   ├── platforms.ts      # Platform definitions
-│   └── utils.ts          # Helper functions
-├── styles/              # CSS styles
-├── package.json         # Dependencies
-└── tsconfig.json        # TypeScript config
+├── app/                    # Next.js app директория
+│   ├── api/               # API маршруты
+│   ├── page.tsx           # Главная страница
+│   ├── layout.tsx         # Корневой layout
+│   └── globals.css        # Глобальные стили
+├── components/            # React компоненты
+│   ├── ui/               # Shadcn UI компоненты
+│   ├── search-results.tsx # Отображение результатов
+│   └── username-search.tsx # Форма поиска
+├── hooks/                # Пользовательские React hooks
+├── lib/                  # Утилиты и конфигурации
+│   ├── platforms.ts      # Определение платформ
+│   └── utils.ts          # Вспомогательные функции
+├── styles/              # CSS стили
+├── package.json         # Зависимости
+└── tsconfig.json        # Конфигурация TypeScript
 ```
 
-## 🔍 How It Works
+## 🔍 Как это работает
 
-1. Enter a username in the search box
-2. Click "Search" or press Enter
-3. Browse through organized platform categories
-4. View search results with platform availability
-5. Click any result to visit the profile directly
+1. Введи ник в поле поиска
+2. Нажми "Поиск" или Enter
+3. Просмотри результаты, организованные по категориям платформ
+4. Смотри информацию о доступности профиля на каждой платформе
+5. Кликни на результат, чтобы перейти на профиль
 
-The application simulates checking profile availability with realistic timing and probability based on platform popularity.
+Приложение имитирует проверку доступности профиля с реалистичным временем отклика и вероятностью, основанной на популярности платформы.
 
-## 🎨 UI/UX Features
+## 🎨 Особенности UI/UX
 
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Dark/Light Mode**: Toggle between themes with system preference detection
-- **Loading States**: Smooth loading animations during searches
-- **Error Handling**: Graceful error messages and fallbacks
-- **Accessibility**: Built with accessibility best practices in mind
-- **Performance Optimized**: Fast page loads and smooth interactions
+- **Адаптивный дизайн**: Работает идеально на ПК, планшете и мобильном
+- **Тёмная/светлая тема**: Переключение между темами с автоопределением системных настроек
+- **Загрузочные состояния**: Плавные анимации при загрузке результатов
+- **Обработка ошибок**: Понятные сообщения об ошибках
+- **Доступность**: Разработано с учётом стандартов доступности
+- **Оптимизация производительности**: Быстрая загрузка и плавные взаимодействия
 
 ## 📝 API Endpoints
 
 ### `POST /api/check-platform`
 
-Check profile availability on a specific platform.
+Проверить доступность профиля на конкретной платформе.
 
-**Request:**
+**Запрос:**
 ```json
 {
   "url": "https://github.com/username",
@@ -147,7 +147,7 @@ Check profile availability on a specific platform.
 }
 ```
 
-**Response:**
+**Ответ:**
 ```json
 {
   "exists": true,
@@ -157,47 +157,47 @@ Check profile availability on a specific platform.
 }
 ```
 
-## 🤝 Contributing
+## 🤝 Способствование развитию
 
-Contributions are welcome! Here's how you can help:
+Вклады приветствуются! Вот как ты можешь помочь:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Форкни репозиторий
+2. Создай feature ветку (`git checkout -b feature/AmazingFeature`)
+3. Коммитни свои изменения (`git commit -m 'Add some AmazingFeature'`)
+4. Пушь в ветку (`git push origin feature/AmazingFeature`)
+5. Открой Pull Request
 
-## 📄 License
+## 📄 Лицензия
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Этот проект лицензирован под MIT лицензией — смотри файл LICENSE для подробнее.
 
-## 🙋 Support
+## 🙋 Поддержка
 
-If you have any questions or need help, feel free to:
-- Open an issue on GitHub
-- Check existing documentation
-- Review the code comments
+Если у тебя есть вопросы или нужна помощь:
+- Открой issue на GitHub
+- Проверь существующую документацию
+- Посмотри комментарии в коде
 
-## 🔮 Future Enhancements
+## 🔮 Планы развития
 
-- [ ] Real API integration for actual profile checking
-- [ ] Username availability filtering
-- [ ] Bulk username searches
-- [ ] Export results to CSV/JSON
-- [ ] Browser extension
-- [ ] Advanced search filters
-- [ ] User accounts and saved searches
-- [ ] API rate limiting and authentication
+- [ ] Интеграция с реальными API для проверки профилей
+- [ ] Фильтрация недоступных ников
+- [ ] Массовый поиск по спискам ников
+- [ ] Экспорт результатов в CSV/JSON
+- [ ] Браузерное расширение
+- [ ] Расширенные фильтры поиска
+- [ ] Аккаунты пользователей и сохранённые поиски
+- [ ] API с аутентификацией и ограничением запросов
 
-## 📊 Statistics
+## 📊 Статистика
 
-- **Platforms Supported**: 50+
-- **Categories**: 8
-- **Built with**: Next.js, React, TypeScript, Tailwind CSS
-- **Performance**: Lightning-fast searches with optimized caching
+- **Поддерживаемых платформ**: 50+
+- **Категорий**: 8
+- **Построено на**: Next.js, React, TypeScript, Tailwind CSS
+- **Производительность**: Молниеносные поиски с оптимизированным кешированием
 
 ---
 
-**GhostTrace** © 2026. Made with ❤️ for the OSINT community.
+**GhostTrace** © 2026. Сделано с ❤️ для OSINT сообщества.
 
-[⬆ Back to Top](#ghosttrace)
+[⬆ В начало](#ghosttrace)
