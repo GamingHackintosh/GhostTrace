@@ -167,8 +167,3 @@ html {
   scroll-behavior: smooth;
   overscroll-behavior: contain;
 }
-
-/* Custom cursor */
-* {
-  cursor: url('/cursor.svg') 12 12, auto;
-}
