@@ -43,9 +43,7 @@ GitHub Actions автоматически соберёт и опубликует
 
 **Made with ❤️ by [@GamingHackintosh](https://github.com/GamingHackintosh)**
 
-/*
-
-
+<pre>
                                      , 
                                     ;o\ 
                                     ;Ob`. 
@@ -70,7 +68,7 @@ GitHub Actions автоматически соберёт и опубликует
                   \`$$(    `""' / 
                    \`"$$c'   _,' 
                     `.____,-' 
-
+    </pre>
                     
                     [>>] DEV: github.com/GamingHackintosh 
-*/
+
