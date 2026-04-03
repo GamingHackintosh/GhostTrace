@@ -161,3 +161,9 @@
 .animate-scan {
   animation: scan-line 1.5s ease-in-out infinite;
 }
+
+/* Smooth scrolling with momentum */
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
