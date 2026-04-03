@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Track digital footprints across platforms. Enter a username and discover where profiles exist.',
   generator: 'v0.app',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/GhostTrace/favicon.svg',
   },
 }
 
