@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/GhostTrace',
+  // basePath only needed for GitHub Pages deployment
+  basePath: process.env.NODE_ENV === 'production' ? '/GhostTrace' : '',
+  allowedDevOrigins: ['192.168.1.106'],
   typescript: {
     ignoreBuildErrors: true,
   },
