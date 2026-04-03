@@ -1,8 +1,35 @@
+```
+                                 , 
+                                ;o\ 
+                                ;Ob`. 
+                               ;OOOOb`. 
+                              ;OOOOOY" ) 
+                             ;OOOO' ,%%) 
+                         \  /OOO ,%%%%,%\ 
+                          |:  ,%%%%%%;%%/ 
+                          ||,%%%%%%%%%%/ 
+                          ;|%%%%%%%%%'/`-'"`. 
+                         /: %%%%%%%%'/ c$$$$.`. 
+                `.______     \ \%%%%%%%'/.$$YF"Y$: ) 
+              _________ "`.\`\o \`%%' ,',$F,.   $F ) 
+     ___,--""'dOOO;,:%%`-._ o_,O_   ,',"',d88)  '  ) 
+  -"'. YOOOOOOO';%%%%%%%%%;`-O   )_     ,X888F   _/ 
+      \ YOOOO',%%%%%%%%%%Y    \__;`),-.  `""F  ,' 
+       \ `" ,%%%%%%%%%%,' _,-   \-' \_ `------' 
+        \_ %%%%',%%%%%_,-' ,;    ( _,-\ 
+          `-.__`%%',-' .c$$'     |\-_,-\ 
+               `""; ,$$$',md8oY  : `\_,') 
+                 ( ,$$$F `88888  ;   `--' 
+                  \`$$(    `""' / 
+                   \`"$$c'   _,' 
+                    `.____,-' 
+```
+
 # 👻 GhostTrace
 
 > OSINT Username Intelligence — Найди скрытые профили. Проследи любой ник через 50+ платформ.
 
-## 🌐 Посетить сайт
+## 🌐 Live Demo
 
 **[https://GamingHackintosh.github.io/GhostTrace/](https://GamingHackintosh.github.io/GhostTrace/)**
 
@@ -17,27 +44,27 @@ npm run dev
 
 Откройте **http://localhost:3000**
 
-## 🛠️ Технологии
+## 🛠️ Стек
 
-- Next.js 16.2.0
-- React 19.2.4
-- TypeScript 5.7.3
-- Tailwind CSS 4.2.2
-- Shadcn/UI
+- Next.js 16 • React 19 • TypeScript • Tailwind CSS • Shadcn/UI
 
-## 📋 Разработка
+## 💻 Разработка
 
-1. `npm run dev` — запустить локально
-2. Редактируй код и тестируй
-3. `git add .` → `git commit -m "..."` → `git push origin code-root`
-4. GitHub Actions автоматически делает деплой 🚀
+```bash
+npm run dev      # Локальная разработка
+npm run build    # Продакшн сборка
+```
 
-## 📁 Репозиторий
+## 🔄 Деплой
 
-- **GitHub**: https://github.com/GamingHackintosh/GhostTrace
-- `main` — README и документация
-- `code-root` — исходный код
-- `gh-pages` — собранный сайт (автоматический)
+Просто пушь в `code-root`:
+```bash
+git add .
+git commit -m "Your message"
+git push origin code-root
+```
+
+GitHub Actions автоматически соберёт и опубликует сайт! 🚀
 
 ---
 
