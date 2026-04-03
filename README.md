@@ -50,7 +50,4 @@ npm run dev
                   \`$$(    `""' / 
                    \`"$$c'   _,' 
                     `.____,-' 
-    </pre>
-                    
-                    [>>] DEV: github.com/GamingHackintosh 
-
+</pre>
