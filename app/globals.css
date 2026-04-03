@@ -167,3 +167,8 @@ html {
   scroll-behavior: smooth;
   overscroll-behavior: contain;
 }
+
+/* Hide default cursor, show only custom */
+* {
+  cursor: none !important;
+}
