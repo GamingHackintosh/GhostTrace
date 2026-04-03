@@ -4,6 +4,7 @@ import { useState, useCallback } from "react"
 import { UsernameSearch } from "@/components/username-search"
 import { SearchResults, SearchResult, ResultStatus } from "@/components/search-results"
 import { platforms } from "@/lib/platforms"
+import { checkPlatform } from "@/lib/check-platform"
 import { Ghost } from "lucide-react"
 
 export default function HomePage() {
@@ -33,13 +34,7 @@ export default function HomePage() {
       await new Promise((resolve) => setTimeout(resolve, 50 + Math.random() * 100))
       
       try {
-        const response = await fetch("/api/check-platform", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url, platform: platform.name }),
-        })
-        
-        const data = await response.json()
+        const data = await checkPlatform(url, platform.name)
         
         setResults((prev) =>
           prev.map((r) =>
