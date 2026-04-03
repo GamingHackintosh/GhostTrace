@@ -9,7 +9,7 @@
      stroke-linejoin="round"
      class="lucide lucide-ghost h-10 w-10 text-primary"
      aria-hidden="true">
-  <rect width="24" height="24" fill="#00BCA2"/>
+  <circle cx="12" cy="12" r="12" fill="black"/>
   <path d="M9 10h.01" stroke="white" fill="white"/>
   <path d="M15 10h.01" stroke="white" fill="white"/>
   <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z" stroke="white"/>
