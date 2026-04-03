@@ -21,24 +21,6 @@ npm run dev
 
 - Next.js 16 • React 19 • TypeScript • Tailwind CSS • Shadcn/UI
 
-## 💻 Разработка
-
-```bash
-npm run dev      # Локальная разработка
-npm run build    # Продакшн сборка
-```
-
-## 🔄 Деплой
-
-Просто пушь в `code-root`:
-```bash
-git add .
-git commit -m "Your message"
-git push origin code-root
-```
-
-GitHub Actions автоматически соберёт и опубликует сайт! 🚀
-
 ---
 
 **Made with ❤️ by [@GamingHackintosh](https://github.com/GamingHackintosh)**
