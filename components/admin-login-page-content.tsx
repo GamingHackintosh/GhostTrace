@@ -30,11 +30,6 @@ export function AdminLoginPageContent() {
                   ? "Проверяйте пользовательские отчеты, подтверждайте статус профилей вручную и постепенно повышайте качество данных."
                   : "Review user reports, confirm profile status manually, and build a cleaner intelligence layer over time."}
               </p>
-              <p className="text-sm text-muted-foreground">
-                {language === "ru"
-                  ? "Локальные данные для входа по умолчанию: admin / admin. Старый пароль change-me тоже пока принимается."
-                  : "Default local credentials are admin / admin. Legacy password change-me is still accepted."}
-              </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
