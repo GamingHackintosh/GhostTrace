@@ -40,28 +40,28 @@ export function SearchResults({ results, username }: SearchResultsProps) {
   const unsupportedCount = results.filter((r) => r.status === "unsupported").length
 
   return (
-    <div className="search-results w-full max-w-4xl space-y-6 overflow-hidden">
+    <div className="results-panel w-full max-w-4xl space-y-6 overflow-hidden">
       {/* Stats Bar */}
-      <div className="search-results__stats-bar flex flex-col gap-4 rounded-lg border border-border/50 bg-card p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <div className="search-results__username flex min-w-0 items-center gap-2">
+      <div className="results-panel__summary flex flex-col gap-4 rounded-lg border border-border/50 bg-card p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="results-panel__query flex min-w-0 items-center gap-2">
           <span className="text-sm text-muted-foreground">{language === "ru" ? "Проверка:" : "Tracing:"}</span>
-          <code className="search-results__username-code rounded bg-secondary px-2 py-1 text-sm font-mono text-primary">
+          <code className="results-panel__query-value rounded bg-secondary px-2 py-1 text-sm font-mono text-primary">
             {username}
           </code>
         </div>
-        <div className="search-results__stats flex flex-wrap items-center gap-3 text-sm">
-          <span className="search-results__stat-item flex items-center gap-1.5">
+        <div className="results-panel__summary-list flex flex-wrap items-center gap-3 text-sm">
+          <span className="results-panel__summary-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-success" />
             <span className="text-success font-medium">{foundCount}</span>
             <span className="text-muted-foreground">{language === "ru" ? "найдено" : "found"}</span>
           </span>
-          <span className="search-results__stat-item flex items-center gap-1.5">
+          <span className="results-panel__summary-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-destructive" />
             <span className="text-destructive font-medium">{notFoundCount}</span>
             <span className="text-muted-foreground">{language === "ru" ? "не найдено" : "not found"}</span>
           </span>
           {checkingCount > 0 && (
-            <span className="search-results__stat-item flex items-center gap-1.5">
+            <span className="results-panel__summary-item flex items-center gap-1.5">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
               <span className="text-muted-foreground">
                 {checkingCount} {language === "ru" ? "в проверке" : "checking"}
@@ -69,7 +69,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             </span>
           )}
           {unsupportedCount > 0 && (
-            <span className="search-results__stat-item flex items-center gap-1.5">
+            <span className="results-panel__summary-item flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/70" />
               <span className="text-muted-foreground">
                 {unsupportedCount} {language === "ru" ? "не поддерживается" : "unsupported"}
@@ -80,9 +80,9 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Filters */}
-      <div className="search-results__filters flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <div className="results-panel__filters flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <Filter className="h-4 w-4 text-muted-foreground" />
-        <div className="search-results__status-filters flex w-full flex-wrap gap-2 sm:w-auto">
+        <div className="results-panel__status-filters flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant={filterStatus === "all" ? "default" : "outline"}
             size="sm"
@@ -108,8 +108,8 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             {language === "ru" ? "Не найден" : "Not Found"}
           </Button>
         </div>
-        <div className="search-results__filters-divider hidden h-4 w-px bg-border sm:mx-2 sm:block" />
-        <div className="search-results__category-filters flex w-full flex-wrap gap-2 sm:w-auto">
+        <div className="results-panel__filters-divider hidden h-4 w-px bg-border sm:mx-2 sm:block" />
+        <div className="results-panel__category-filters flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant={filterCategory === "all" ? "secondary" : "ghost"}
             size="sm"
@@ -133,14 +133,14 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Results Grid */}
-      <div className="search-results__grid grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="results-panel__grid grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {filteredResults.map((result) => (
           <ResultCard key={result.platform} result={result} username={username} />
         ))}
       </div>
 
       {filteredResults.length === 0 && (
-        <div className="search-results__empty-state py-12 text-center text-muted-foreground">
+        <div className="results-panel__empty-state py-12 text-center text-muted-foreground">
           {language === "ru" ? "Нет результатов по выбранным фильтрам" : "No results match your filters"}
         </div>
       )}
@@ -188,12 +188,12 @@ function ResultCard({ result, username }: { result: SearchResult; username: stri
 
   return (
     <div
-      className={`search-results__card group relative min-w-0 rounded-lg border p-4 transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
+      className={`platform-result-card group relative min-w-0 rounded-lg border p-4 transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
     >
-      <div className="search-results__card-header flex items-start justify-between gap-2">
-        <div className="search-results__card-content min-w-0 flex-1">
-          <div className="search-results__card-title-row flex items-center gap-2">
-            <h3 className="search-results__card-title truncate font-medium">{result.platform}</h3>
+      <div className="platform-result-card__header flex items-start justify-between gap-2">
+        <div className="platform-result-card__body min-w-0 flex-1">
+          <div className="platform-result-card__title-row flex items-center gap-2">
+            <h3 className="platform-result-card__title truncate font-medium">{result.platform}</h3>
             <Icon
               className={`h-4 w-4 flex-shrink-0 ${config.color} ${
                 result.status === "checking" ? "animate-spin" : ""
@@ -209,19 +209,19 @@ function ResultCard({ result, username }: { result: SearchResult; username: stri
             href={result.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="search-results__card-link rounded-md p-2 transition-colors hover:bg-primary/10"
+            className="platform-result-card__link rounded-md p-2 transition-colors hover:bg-primary/10"
           >
             <ExternalLink className="h-4 w-4 text-primary" />
           </a>
         )}
       </div>
       {result.status === "found" && (
-        <p className="search-results__card-url mt-2 truncate text-xs font-mono text-muted-foreground">
+        <p className="platform-result-card__url mt-2 truncate text-xs font-mono text-muted-foreground">
           {result.url}
         </p>
       )}
       {result.status === "unsupported" && (
-        <p className="search-results__card-url mt-2 text-xs text-muted-foreground">
+        <p className="platform-result-card__note mt-2 text-xs text-muted-foreground">
           {language === "ru"
             ? "Надежная автоматическая проверка для этой платформы пока недоступна в текущей версии."
             : "Reliable automatic check is not available for this platform in the current build."}

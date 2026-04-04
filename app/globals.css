@@ -174,10 +174,10 @@
     overflow-x: hidden;
   }
 
-  .home-header__nav,
-  .search-results__filters,
-  .search-results__stats,
-  .username-search__legend {
+  .site-topbar__nav,
+  .results-panel__filters,
+  .results-panel__summary-list,
+  .search-status-legend {
     overflow-wrap: anywhere;
   }
 }

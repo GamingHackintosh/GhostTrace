@@ -74,41 +74,41 @@ export default function HomePage() {
   }, [])
 
   return (
-    <main className="home-page min-h-screen bg-background">
+    <main className="landing-screen min-h-screen bg-background">
       {/* Background effects */}
-      <div className="home-page__background fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background pointer-events-none" />
+      <div className="landing-screen__backdrop fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background pointer-events-none" />
       
-      <div className="home-page__container relative flex flex-col items-center px-4 py-10 sm:py-16">
+      <div className="landing-screen__content relative flex flex-col items-center px-4 py-10 sm:py-16">
         {/* Header */}
-        <header className="home-header mb-10 flex w-full max-w-4xl flex-col items-start gap-5 sm:mb-16 lg:flex-row lg:items-center lg:justify-between">
-          <div className="home-header__brand flex items-center gap-2">
+        <header className="site-topbar mb-10 flex w-full max-w-4xl flex-col items-start gap-5 sm:mb-16 lg:flex-row lg:items-center lg:justify-between">
+          <div className="site-topbar__brand flex items-center gap-2">
             <Ghost className="h-6 w-6 text-primary" />
             <span className="font-semibold">GhostTrace</span>
           </div>
-          <nav className="home-header__nav flex w-full flex-wrap items-center gap-3 text-sm text-muted-foreground lg:w-auto lg:justify-end lg:gap-6">
+          <nav className="site-topbar__nav flex w-full flex-wrap items-center gap-3 text-sm text-muted-foreground lg:w-auto lg:justify-end lg:gap-6">
             {currentAdminUser ? (
               <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
                 {language === "ru" ? `Админ: ${currentAdminUser}` : `Admin: ${currentAdminUser}`}
               </span>
             ) : null}
             <LanguageSwitcher />
-            <Link href="/about" className="home-header__link transition-colors hover:text-foreground">
+            <Link href="/about" className="site-topbar__link transition-colors hover:text-foreground">
               {language === "ru" ? "О проекте" : "About"}
             </Link>
-            <Link href="/tickets" className="home-header__link transition-colors hover:text-foreground">
+            <Link href="/tickets" className="site-topbar__link transition-colors hover:text-foreground">
               {language === "ru" ? "Тикеты" : "Tickets"}
             </Link>
-            <Link href="/admin/login" className="home-header__link transition-colors hover:text-foreground">
+            <Link href="/admin/login" className="site-topbar__link transition-colors hover:text-foreground">
               {language === "ru" ? "Админ" : "Admin"}
             </Link>
-            <a href="#" className="home-header__link transition-colors hover:text-foreground">
+            <a href="#" className="site-topbar__link transition-colors hover:text-foreground">
               API
             </a>
             <a
               href="https://github.com/GamingHackintosh/GhostTrace"
               target="_blank"
               rel="noopener noreferrer"
-              className="home-header__link transition-colors hover:text-foreground"
+              className="site-topbar__link transition-colors hover:text-foreground"
             >
               GitHub
             </a>
@@ -116,19 +116,19 @@ export default function HomePage() {
         </header>
 
         {/* Search Section */}
-        <section className={`home-search-section w-full transition-all duration-500 ${searchedUsername ? "mb-10 sm:mb-12" : "mt-8 sm:mt-24"}`}>
+        <section className={`lookup-stage w-full transition-all duration-500 ${searchedUsername ? "mb-10 sm:mb-12" : "mt-8 sm:mt-24"}`}>
           <UsernameSearch onSearch={handleSearch} isSearching={isSearching} />
         </section>
 
         {/* Results Section */}
         {searchedUsername && (
-          <section className="home-results-section flex w-full justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <section className="lookup-results flex w-full justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
             <SearchResults results={results} username={searchedUsername} />
           </section>
         )}
 
         {/* Footer */}
-        <footer className="home-footer mt-auto pt-16 text-center text-sm text-muted-foreground">
+        <footer className="site-footer mt-auto pt-16 text-center text-sm text-muted-foreground">
           <p>
             {language === "ru"
               ? "Только публичные данные из открытых API. Только для исследовательских и учебных целей."

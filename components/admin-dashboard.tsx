@@ -79,21 +79,21 @@ export function AdminDashboard() {
   const userTicketsCount = tickets.filter((entry) => entry.createdBy === "user").length
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
-        <header className="mb-10 flex flex-col gap-4 border-b border-border/60 pb-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
+    <main className="admin-workspace min-h-screen bg-background">
+      <div className="admin-workspace__content mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+        <header className="admin-workspace__header mb-10 flex flex-col gap-4 border-b border-border/60 pb-6">
+          <div className="admin-workspace__header-row flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="admin-workspace__intro">
               <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">GhostTrace</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+              <h1 className="admin-workspace__title mt-2 text-3xl font-semibold tracking-tight">
                 {language === "ru" ? "Очередь тикетов админки" : "Admin ticket queue"}
               </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              <p className="admin-workspace__description mt-2 max-w-2xl text-sm text-muted-foreground">
                 {language === "ru"
                   ? "Проверяйте пользовательские отчеты, управляйте ручными тикетами и применяйте подтвержденные overrides без отказа от статического хостинга."
                   : "Review user reports, manage manual tickets, and apply verified overrides without leaving static hosting."}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="admin-workspace__tabs mt-4 flex flex-wrap gap-2">
                 <Button
                   type="button"
                   size="sm"
@@ -113,17 +113,17 @@ export function AdminDashboard() {
               </div>
             </div>
 
-            <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
-              <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
+            <div className="admin-workspace__controls flex w-full flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
+              <span className="admin-workspace__session rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
                 {language === "ru" ? `Вошли как ${currentUser ?? "admin"}` : `Signed in as ${currentUser ?? "admin"}`}
               </span>
               <LanguageSwitcher />
-              <Link href="/" className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent">
+              <Link href="/" className="admin-workspace__action inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent">
                 {language === "ru" ? "Главная" : "Homepage"}
               </Link>
               <Link
                 href="/tickets"
-                className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent"
+                className="admin-workspace__action inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent"
               >
                 {language === "ru" ? "Публичные тикеты" : "Public tickets"}
               </Link>
@@ -131,7 +131,7 @@ export function AdminDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
+          <div className="admin-workspace__metrics grid grid-cols-2 gap-3 xl:grid-cols-5">
             <StatusCard label="Новые" value={newTickets.length} tone="sky" />
             <StatusCard label="Назначенные" value={assignedTickets.length} tone="primary" />
             <StatusCard label="В ожидании" value={waitingTickets.length} tone="amber" />
@@ -141,15 +141,15 @@ export function AdminDashboard() {
         </header>
 
         {isLoading ? (
-          <div className="rounded-3xl border border-border/60 bg-card/60 p-6 text-sm text-muted-foreground">
+          <div className="admin-workspace__loading rounded-3xl border border-border/60 bg-card/60 p-6 text-sm text-muted-foreground">
             {language === "ru" ? "Загрузка админ-панели..." : "Loading admin dashboard..."}
           </div>
         ) : error ? (
-          <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-6 text-sm text-amber-700">
+          <div className="admin-workspace__error rounded-3xl border border-amber-500/30 bg-amber-500/10 p-6 text-sm text-amber-700">
             {error}
           </div>
         ) : activeTab === "create" ? (
-          <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+          <section className="admin-workspace__create-layout grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
             <AdminCreateTicketForm
               onCreated={() => {
                 reloadDashboard()
@@ -157,7 +157,7 @@ export function AdminDashboard() {
               }}
             />
 
-            <aside className="rounded-3xl border border-border/60 bg-card/60 p-6">
+            <aside className="admin-workspace__guide rounded-3xl border border-border/60 bg-card/60 p-6">
               <h2 className="text-xl font-medium">Workflow</h2>
               <div className="mt-4 space-y-3 text-sm text-muted-foreground">
                 <p>{language === "ru" ? "Пользователи могут создавать тикеты из карточек результатов или с публичной страницы очереди." : "Users can open tickets from result cards or from the public tickets page."}</p>
@@ -167,8 +167,8 @@ export function AdminDashboard() {
             </aside>
           </section>
         ) : (
-          <section className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
-            <div className="space-y-6">
+          <section className="admin-workspace__queue-layout grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
+            <div className="admin-workspace__main-column space-y-6">
               <TicketSection
                 title={language === "ru" ? "Новые тикеты" : "New tickets"}
                 description={
@@ -208,7 +208,7 @@ export function AdminDashboard() {
                 onUpdated={reloadDashboard}
               />
 
-              <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
+              <div className="admin-workspace__reviewed-panel rounded-3xl border border-border/60 bg-card/60 p-6">
                 <h2 className="text-xl font-medium">{language === "ru" ? "Обработанные тикеты" : "Reviewed tickets"}</h2>
                 <div className="mt-4 space-y-3">
                   {reviewedTickets.length === 0 ? (
@@ -228,8 +228,8 @@ export function AdminDashboard() {
               </div>
             </div>
 
-            <aside className="space-y-6">
-              <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
+            <aside className="admin-workspace__side-column space-y-6">
+              <div className="admin-workspace__summary-panel rounded-3xl border border-border/60 bg-card/60 p-6">
                 <h2 className="text-xl font-medium">{language === "ru" ? "Сводка по очереди" : "Queue overview"}</h2>
                 <div className="mt-4 space-y-3 text-sm text-muted-foreground">
                   <p>{language === "ru" ? "Тикеты от пользователей и задачи, созданные админом, используют одну и ту же очередь и жизненный цикл." : "Tickets from users and admin-created tasks share the same queue and lifecycle."}</p>
@@ -237,14 +237,14 @@ export function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
+              <div className="admin-workspace__overrides-panel rounded-3xl border border-border/60 bg-card/60 p-6">
                 <h2 className="text-xl font-medium">{language === "ru" ? "Активные overrides" : "Active overrides"}</h2>
                 <div className="mt-4 space-y-3">
                   {overrides.length === 0 ? (
                     <p className="text-sm text-muted-foreground">{language === "ru" ? "Пока нет ручных overrides." : "No manual overrides yet."}</p>
                   ) : (
                     overrides.map((entry) => (
-                      <div key={entry.id} className="rounded-2xl border border-border/50 bg-background/50 p-4 text-sm">
+                      <div key={entry.id} className="override-record rounded-2xl border border-border/50 bg-background/50 p-4 text-sm">
                         <p className="font-medium">
                           {entry.platform} / <span className="font-mono">{entry.username}</span>
                         </p>
@@ -286,7 +286,7 @@ function StatusCard({
   }
 
   return (
-    <div className={`rounded-2xl border p-4 ${classes[tone]}`}>
+    <div className={`admin-metric-card rounded-2xl border p-4 ${classes[tone]}`}>
       <p className="text-xs uppercase tracking-[0.2em]">{label}</p>
       <p className="mt-2 text-2xl font-semibold sm:text-3xl">{value}</p>
     </div>
@@ -310,13 +310,13 @@ function TicketSection({
 }) {
   const { language } = useLanguage()
   return (
-    <div className="rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-6">
+    <div className="ticket-lane rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-6">
       <h2 className="text-xl font-medium">{title}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{description}</p>
 
-      <div className="mt-6 space-y-4">
+      <div className="ticket-lane__list mt-6 space-y-4">
         {tickets.length === 0 ? (
-          <div className="rounded-2xl border border-border/50 bg-background/50 p-5 text-sm text-muted-foreground">
+          <div className="ticket-lane__empty rounded-2xl border border-border/50 bg-background/50 p-5 text-sm text-muted-foreground">
             {emptyMessage}
           </div>
         ) : (
@@ -347,22 +347,22 @@ function TicketCard({
 }) {
   const { language } = useLanguage()
   return (
-    <article className="space-y-4 rounded-2xl border border-border/60 bg-background/50 p-4 sm:p-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{ticket.ticketNumber}</p>
-          <h3 className="mt-1 text-lg font-medium">
+    <article className="moderation-ticket-card space-y-4 rounded-2xl border border-border/60 bg-background/50 p-4 sm:p-5">
+      <div className="moderation-ticket-card__header flex flex-wrap items-center justify-between gap-3">
+        <div className="moderation-ticket-card__identity">
+          <p className="moderation-ticket-card__number text-xs uppercase tracking-[0.2em] text-muted-foreground">{ticket.ticketNumber}</p>
+          <h3 className="moderation-ticket-card__title mt-1 text-lg font-medium">
             {ticket.platform} / <span className="font-mono">{ticket.username}</span>
           </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="moderation-ticket-card__status-line mt-1 text-sm text-muted-foreground">
             Current: {ticket.currentStatus} | Suggested: {ticket.suggestedStatus}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <span className={`rounded-full border px-3 py-1 text-xs ${getTicketStatusClasses(ticket.ticketStatus)}`}>
+        <div className="moderation-ticket-card__badges flex flex-wrap gap-2">
+          <span className={`moderation-ticket-card__state rounded-full border px-3 py-1 text-xs ${getTicketStatusClasses(ticket.ticketStatus)}`}>
             {getTicketStatusLabel(ticket.ticketStatus)}
           </span>
-          <span className="rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs text-muted-foreground">
+          <span className="moderation-ticket-card__origin rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs text-muted-foreground">
             {ticket.createdBy === "admin"
               ? language === "ru"
                 ? "Тикет администратора"
@@ -374,7 +374,7 @@ function TicketCard({
         </div>
       </div>
 
-      <div className="grid gap-3 break-words text-sm text-muted-foreground">
+      <div className="moderation-ticket-card__details grid gap-3 break-words text-sm text-muted-foreground">
         <p>
           <strong className="text-foreground">{language === "ru" ? "Создан" : "Submitted"}:</strong> {new Date(ticket.createdAt).toLocaleString()}
         </p>
@@ -401,7 +401,7 @@ function TicketCard({
         ) : null}
       </div>
 
-      <div className={compact ? "pt-1" : ""}>
+      <div className={`moderation-ticket-card__actions ${compact ? "pt-1" : ""}`}>
         <AdminFeedbackActions
           feedbackId={ticket.id}
           ticketStatus={ticket.ticketStatus}
