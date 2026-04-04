@@ -3,16 +3,33 @@
 import { useEffect, useState } from 'react'
 
 export default function CustomCursor() {
+  const [isMobile, setIsMobile] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: none), (pointer: coarse), (max-width: 768px)')
+
+    const updateDeviceType = () => {
+      setIsMobile(mediaQuery.matches)
+    }
+
     const updatePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY })
     }
 
+    updateDeviceType()
     window.addEventListener('mousemove', updatePosition)
-    return () => window.removeEventListener('mousemove', updatePosition)
+    mediaQuery.addEventListener('change', updateDeviceType)
+
+    return () => {
+      window.removeEventListener('mousemove', updatePosition)
+      mediaQuery.removeEventListener('change', updateDeviceType)
+    }
   }, [])
+
+  if (isMobile) {
+    return null
+  }
 
   return (
     <div
