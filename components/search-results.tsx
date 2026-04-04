@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
-export type ResultStatus = "found" | "not_found" | "checking" | "error"
+export type ResultStatus = "found" | "not_found" | "checking" | "error" | "unsupported"
 
 export interface SearchResult {
   platform: string
@@ -34,6 +34,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
   const foundCount = results.filter((r) => r.status === "found").length
   const notFoundCount = results.filter((r) => r.status === "not_found").length
   const checkingCount = results.filter((r) => r.status === "checking").length
+  const unsupportedCount = results.filter((r) => r.status === "unsupported").length
 
   return (
     <div className="search-results w-full max-w-4xl space-y-6">
@@ -60,6 +61,12 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             <span className="search-results__stat-item flex items-center gap-1.5">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
               <span className="text-muted-foreground">{checkingCount} checking</span>
+            </span>
+          )}
+          {unsupportedCount > 0 && (
+            <span className="search-results__stat-item flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/70" />
+              <span className="text-muted-foreground">{unsupportedCount} unsupported</span>
             </span>
           )}
         </div>
@@ -160,6 +167,12 @@ function ResultCard({ result }: { result: SearchResult }) {
       bgColor: "bg-warning/10",
       borderColor: "border-warning/30",
     },
+    unsupported: {
+      icon: X,
+      color: "text-muted-foreground",
+      bgColor: "bg-secondary/40",
+      borderColor: "border-border/70",
+    },
   }
 
   const config = statusConfig[result.status]
@@ -197,6 +210,11 @@ function ResultCard({ result }: { result: SearchResult }) {
       {result.status === "found" && (
         <p className="search-results__card-url mt-2 truncate text-xs font-mono text-muted-foreground">
           {result.url}
+        </p>
+      )}
+      {result.status === "unsupported" && (
+        <p className="search-results__card-url mt-2 text-xs text-muted-foreground">
+          Reliable automatic check is not available for this platform in the current build.
         </p>
       )}
     </div>

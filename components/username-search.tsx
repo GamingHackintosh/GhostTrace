@@ -83,6 +83,10 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
           <span className="h-2 w-2 rounded-full bg-muted-foreground" />
           Checking
         </span>
+        <span className="username-search__legend-item flex items-center gap-1">
+          <span className="h-2 w-2 rounded-full bg-secondary" />
+          Unsupported
+        </span>
       </div>
     </div>
   )

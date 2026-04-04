@@ -1,57 +1,54 @@
-export async function checkPlatform(url: string, platform: string) {
+type CheckMethod = "github-api" | "head-status" | "unsupported"
+
+export async function checkPlatform(
+  url: string,
+  platform: string,
+  username: string,
+  checkMethod: CheckMethod
+) {
+  if (checkMethod === "unsupported") {
+    return { exists: false, url, platform, checked: false, unsupported: true }
+  }
+
   try {
-    if (!url || !platform) {
+    if (!url || !platform || !username) {
       return { error: "Missing url or platform", exists: false }
     }
 
-    // Simulate realistic results - some platforms are more likely to have profiles
-    const popularPlatforms = [
-      "GitHub",
-      "Twitter/X",
-      "Instagram",
-      "Reddit",
-      "YouTube",
-      "LinkedIn",
-      "Discord",
-      "Steam",
-      "Twitch",
-    ]
+    const response = await fetch("/api/check-platform", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+        platform,
+        username,
+        checkMethod,
+      }),
+    })
 
-    const mediumPlatforms = [
-      "TikTok",
-      "Facebook",
-      "Pinterest",
-      "Spotify",
-      "Medium",
-      "Dev.to",
-      "Stack Overflow",
-      "CodePen",
-    ]
-
-    // Determine probability of profile existing based on platform popularity
-    let probability = 0.15 // Base probability for uncommon platforms
-
-    if (popularPlatforms.includes(platform)) {
-      probability = 0.65
-    } else if (mediumPlatforms.includes(platform)) {
-      probability = 0.35
+    if (!response.ok) {
+      throw new Error("API route is unavailable")
     }
 
-    // Use a seeded random based on the URL to get consistent results for the same username
-    const hash = url.split("").reduce((acc: number, char: string) => {
-      return acc + char.charCodeAt(0)
-    }, 0)
-    const seededRandom = (hash % 100) / 100
-
-    const exists = seededRandom < probability
-
-    return {
-      exists,
-      url,
-      platform,
-      checked: true,
-    }
+    return await response.json()
   } catch {
-    return { error: "Failed to check platform", exists: false }
+    if (checkMethod === "github-api") {
+      try {
+        const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`)
+        return {
+          exists: response.ok,
+          url,
+          platform,
+          checked: response.ok || response.status === 404,
+          unsupported: false,
+        }
+      } catch {
+        return { error: "Failed to check platform", exists: false }
+      }
+    }
+
+    return { error: "Failed to check platform", exists: false, unsupported: true }
   }
 }

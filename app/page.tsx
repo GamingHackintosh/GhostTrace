@@ -22,7 +22,7 @@ export default function HomePage() {
       platform: p.name,
       category: p.category,
       url: p.urlTemplate.replace("{username}", username),
-      status: "checking" as ResultStatus,
+      status: (p.checkMethod === "unsupported" ? "unsupported" : "checking") as ResultStatus,
     }))
     setResults(initialResults)
 
@@ -30,14 +30,23 @@ export default function HomePage() {
       platforms.map(async (platform) => {
         const url = platform.urlTemplate.replace("{username}", username)
 
+        if (platform.checkMethod === "unsupported") {
+          return {
+            platform: platform.name,
+            category: platform.category,
+            url,
+            status: "unsupported" as ResultStatus,
+          }
+        }
+
         try {
-          const data = await checkPlatform(url, platform.name)
+          const data = await checkPlatform(url, platform.name, username, platform.checkMethod)
 
           return {
             platform: platform.name,
             category: platform.category,
             url,
-            status: (data.exists ? "found" : "not_found") as ResultStatus,
+            status: (data.unsupported ? "unsupported" : data.exists ? "found" : "not_found") as ResultStatus,
           }
         } catch {
           return {

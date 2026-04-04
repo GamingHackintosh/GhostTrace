@@ -1,65 +1,83 @@
 import { NextRequest, NextResponse } from "next/server"
 
+async function checkByHeadStatus(url: string) {
+  const response = await fetch(url, {
+    method: "HEAD",
+    redirect: "follow",
+    headers: {
+      "User-Agent": "GhostTrace/1.0 (+username-check)",
+      Accept: "text/html,application/xhtml+xml",
+    },
+    cache: "no-store",
+  })
+
+  if (response.status === 405) {
+    const fallback = await fetch(url, {
+      method: "GET",
+      redirect: "follow",
+      headers: {
+        "User-Agent": "GhostTrace/1.0 (+username-check)",
+        Accept: "text/html,application/xhtml+xml",
+      },
+      cache: "no-store",
+    })
+
+    return fallback.status
+  }
+
+  return response.status
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { url, platform } = await request.json()
+    const { url, platform, username, checkMethod } = await request.json()
 
-    if (!url || !platform) {
-      return NextResponse.json({ error: "Missing url or platform" }, { status: 400 })
+    if (!url || !platform || !username || !checkMethod) {
+      return NextResponse.json({ error: "Missing request fields" }, { status: 400 })
     }
 
-    // Simulate checking the platform with realistic timing
-    // In a production app, you would make actual HEAD/GET requests to check profile existence
-    // Note: Many platforms block automated requests, so this uses simulation for demo
-    await new Promise((resolve) => setTimeout(resolve, 200 + Math.random() * 800))
-
-    // Simulate realistic results - some platforms are more likely to have profiles
-    const popularPlatforms = [
-      "GitHub",
-      "Twitter/X",
-      "Instagram",
-      "Reddit",
-      "YouTube",
-      "LinkedIn",
-      "Discord",
-      "Steam",
-      "Twitch",
-    ]
-
-    const mediumPlatforms = [
-      "TikTok",
-      "Facebook",
-      "Pinterest",
-      "Spotify",
-      "Medium",
-      "Dev.to",
-      "Stack Overflow",
-      "CodePen",
-    ]
-
-    // Determine probability of profile existing based on platform popularity
-    let probability = 0.15 // Base probability for uncommon platforms
-
-    if (popularPlatforms.includes(platform)) {
-      probability = 0.65
-    } else if (mediumPlatforms.includes(platform)) {
-      probability = 0.35
+    if (checkMethod === "unsupported") {
+      return NextResponse.json({
+        exists: false,
+        url,
+        platform,
+        checked: false,
+        unsupported: true,
+      })
     }
 
-    // Use a seeded random based on the URL to get consistent results for the same username
-    const hash = url.split("").reduce((acc: number, char: string) => {
-      return acc + char.charCodeAt(0)
-    }, 0)
-    const seededRandom = (hash % 100) / 100
+    if (checkMethod === "github-api") {
+      const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "User-Agent": "GhostTrace/1.0",
+        },
+        cache: "no-store",
+      })
 
-    const exists = seededRandom < probability
+      return NextResponse.json({
+        exists: response.ok,
+        url,
+        platform,
+        checked: response.ok || response.status === 404,
+        unsupported: false,
+      })
+    }
 
-    return NextResponse.json({
-      exists,
-      url,
-      platform,
-      checked: true,
-    })
+    if (checkMethod === "head-status") {
+      const status = await checkByHeadStatus(url)
+
+      return NextResponse.json({
+        exists: status >= 200 && status < 400,
+        url,
+        platform,
+        checked: status < 500,
+        unsupported: false,
+        statusCode: status,
+      })
+    }
+
+    return NextResponse.json({ error: "Unsupported check method" }, { status: 400 })
   } catch {
     return NextResponse.json({ error: "Failed to check platform" }, { status: 500 })
   }
