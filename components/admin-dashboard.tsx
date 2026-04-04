@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AdminFeedbackActions } from "@/components/admin-feedback-actions"
+import { AdminCreateTicketForm } from "@/components/admin-create-ticket-form"
 import { AdminLogoutButton } from "@/components/admin-logout-button"
+import { Button } from "@/components/ui/button"
 import { isAdminLoggedIn, listClientOverrides, listClientTickets } from "@/lib/client-ticket-store"
 
 interface FeedbackEntry {
@@ -33,6 +35,7 @@ interface PlatformOverride {
 
 export function AdminDashboard() {
   const router = useRouter()
+  const [activeTab, setActiveTab] = useState<"queue" | "create">("queue")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const [feedback, setFeedback] = useState<FeedbackEntry[]>([])
@@ -90,6 +93,24 @@ export function AdminDashboard() {
             <p className="mt-2 text-sm text-muted-foreground">
               Review feedback tickets and apply manual overrides to improve platform accuracy.
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant={activeTab === "queue" ? "default" : "outline"}
+                onClick={() => setActiveTab("queue")}
+              >
+                Ticket queue
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={activeTab === "create" ? "default" : "outline"}
+                onClick={() => setActiveTab("create")}
+              >
+                Create ticket
+              </Button>
+            </div>
           </div>
           <AdminLogoutButton />
         </header>
@@ -102,6 +123,24 @@ export function AdminDashboard() {
           <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-6 text-sm text-amber-700">
             {error}
           </div>
+        ) : activeTab === "create" ? (
+          <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+            <AdminCreateTicketForm
+              onCreated={() => {
+                reloadDashboard()
+                setActiveTab("queue")
+              }}
+            />
+
+            <aside className="rounded-3xl border border-border/60 bg-card/60 p-6">
+              <h2 className="text-xl font-medium">How manual tickets work</h2>
+              <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <p>Use this tab when you want to create a moderation task yourself without waiting for a user report.</p>
+                <p>Each created ticket enters the same queue and receives its own ticket number.</p>
+                <p>After creation, you can move it into review, resolve it, reject it, or turn it into a manual override.</p>
+              </div>
+            </aside>
+          </section>
         ) : (
           <section className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
             <div className="space-y-6">
