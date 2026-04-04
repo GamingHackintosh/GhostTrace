@@ -5,13 +5,17 @@ import Lenis from 'lenis'
 
 export default function SmoothScroll() {
   useEffect(() => {
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches
+
+    if (isReducedMotion || isTouchDevice) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
-      // Эту функцию easing можно оставить, она стандартная для Lenis
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      
-      // Настройки в новых версиях:
-      wheelMultiplier: 1,      // Вместо mouseMultiplier
+      wheelMultiplier: 1,
       touchMultiplier: 2,
       infinite: false,
     })

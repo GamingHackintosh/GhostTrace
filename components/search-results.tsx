@@ -36,28 +36,28 @@ export function SearchResults({ results, username }: SearchResultsProps) {
   const checkingCount = results.filter((r) => r.status === "checking").length
 
   return (
-    <div className="w-full max-w-4xl space-y-6">
+    <div className="search-results w-full max-w-4xl space-y-6">
       {/* Stats Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-card rounded-lg border border-border/50">
-        <div className="flex items-center gap-2">
+      <div className="search-results__stats-bar flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border/50 bg-card p-4">
+        <div className="search-results__username flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Tracing:</span>
-          <code className="px-2 py-1 bg-secondary rounded text-sm font-mono text-primary">
+          <code className="search-results__username-code rounded bg-secondary px-2 py-1 text-sm font-mono text-primary">
             {username}
           </code>
         </div>
-        <div className="flex items-center gap-4 text-sm">
-          <span className="flex items-center gap-1.5">
+        <div className="search-results__stats flex items-center gap-4 text-sm">
+          <span className="search-results__stat-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-success" />
             <span className="text-success font-medium">{foundCount}</span>
             <span className="text-muted-foreground">found</span>
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="search-results__stat-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-destructive" />
             <span className="text-destructive font-medium">{notFoundCount}</span>
             <span className="text-muted-foreground">not found</span>
           </span>
           {checkingCount > 0 && (
-            <span className="flex items-center gap-1.5">
+            <span className="search-results__stat-item flex items-center gap-1.5">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
               <span className="text-muted-foreground">{checkingCount} checking</span>
             </span>
@@ -66,9 +66,9 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="search-results__filters flex flex-wrap items-center gap-2">
         <Filter className="h-4 w-4 text-muted-foreground" />
-        <div className="flex flex-wrap gap-2">
+        <div className="search-results__status-filters flex flex-wrap gap-2">
           <Button
             variant={filterStatus === "all" ? "default" : "outline"}
             size="sm"
@@ -94,8 +94,8 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             Not Found
           </Button>
         </div>
-        <div className="h-4 w-px bg-border mx-2" />
-        <div className="flex flex-wrap gap-2">
+        <div className="search-results__filters-divider mx-2 h-4 w-px bg-border" />
+        <div className="search-results__category-filters flex flex-wrap gap-2">
           <Button
             variant={filterCategory === "all" ? "secondary" : "ghost"}
             size="sm"
@@ -119,14 +119,14 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Results Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="search-results__grid grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {filteredResults.map((result) => (
           <ResultCard key={result.platform} result={result} />
         ))}
       </div>
 
       {filteredResults.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className="search-results__empty-state py-12 text-center text-muted-foreground">
           No results match your filters
         </div>
       )}
@@ -167,12 +167,12 @@ function ResultCard({ result }: { result: SearchResult }) {
 
   return (
     <div
-      className={`group relative p-4 rounded-lg border transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
+      className={`search-results__card group relative rounded-lg border p-4 transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="font-medium truncate">{result.platform}</h3>
+      <div className="search-results__card-header flex items-start justify-between gap-2">
+        <div className="search-results__card-content min-w-0 flex-1">
+          <div className="search-results__card-title-row flex items-center gap-2">
+            <h3 className="search-results__card-title truncate font-medium">{result.platform}</h3>
             <Icon
               className={`h-4 w-4 flex-shrink-0 ${config.color} ${
                 result.status === "checking" ? "animate-spin" : ""
@@ -188,14 +188,14 @@ function ResultCard({ result }: { result: SearchResult }) {
             href={result.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-md hover:bg-primary/10 transition-colors"
+            className="search-results__card-link rounded-md p-2 transition-colors hover:bg-primary/10"
           >
             <ExternalLink className="h-4 w-4 text-primary" />
           </a>
         )}
       </div>
       {result.status === "found" && (
-        <p className="mt-2 text-xs text-muted-foreground font-mono truncate">
+        <p className="search-results__card-url mt-2 truncate text-xs font-mono text-muted-foreground">
           {result.url}
         </p>
       )}

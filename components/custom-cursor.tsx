@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CustomCursor() {
   const [isMobile, setIsMobile] = useState(false)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const cursorRef = useRef<HTMLDivElement | null>(null)
+  const frameRef = useRef<number | null>(null)
+  const pointerRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(hover: none), (pointer: coarse), (max-width: 768px)')
@@ -14,7 +16,21 @@ export default function CustomCursor() {
     }
 
     const updatePosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY })
+      pointerRef.current = { x: e.clientX, y: e.clientY }
+
+      if (frameRef.current !== null) {
+        return
+      }
+
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = null
+
+        if (!cursorRef.current) {
+          return
+        }
+
+        cursorRef.current.style.transform = `translate3d(${pointerRef.current.x - 12}px, ${pointerRef.current.y - 12}px, 0)`
+      })
     }
 
     updateDeviceType()
@@ -24,6 +40,9 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener('mousemove', updatePosition)
       mediaQuery.removeEventListener('change', updateDeviceType)
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current)
+      }
     }
   }, [])
 
@@ -33,11 +52,11 @@ export default function CustomCursor() {
 
   return (
     <div
+      ref={cursorRef}
       className="fixed pointer-events-none z-50 transition-none"
       style={{
-        left: position.x - 12,
-        top: position.y - 12,
         mixBlendMode: 'difference',
+        willChange: 'transform',
       }}
     >
       <svg

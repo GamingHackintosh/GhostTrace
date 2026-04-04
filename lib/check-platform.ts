@@ -4,11 +4,6 @@ export async function checkPlatform(url: string, platform: string) {
       return { error: "Missing url or platform", exists: false }
     }
 
-    // Simulate checking the platform with realistic timing
-    // In a production app, you would make actual HEAD/GET requests to check profile existence
-    // Note: Many platforms block automated requests, so this uses simulation for demo
-    await new Promise((resolve) => setTimeout(resolve, 200 + Math.random() * 800))
-
     // Simulate realistic results - some platforms are more likely to have profiles
     const popularPlatforms = [
       "GitHub",

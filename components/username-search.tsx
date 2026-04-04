@@ -24,24 +24,24 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
   )
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <div className="flex items-center gap-3">
-        <div className="relative">
+    <div className="username-search flex flex-col items-center gap-8">
+      <div className="username-search__title-group flex items-center gap-3">
+        <div className="username-search__logo-wrap relative">
           <Ghost className="h-10 w-10 text-primary" />
-          <div className="absolute inset-0 blur-lg bg-primary/30 -z-10" />
+          <div className="username-search__logo-glow absolute inset-0 -z-10 bg-primary/30 blur-lg" />
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">
+        <h1 className="username-search__title text-4xl font-bold tracking-tight">
           Ghost<span className="text-primary">Trace</span>
         </h1>
       </div>
       
-      <p className="text-muted-foreground text-center max-w-md">
+      <p className="username-search__description max-w-md text-center text-muted-foreground">
         OSINT Username Intelligence. Enter a username to trace digital footprints across platforms.
       </p>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-lg">
-        <div className="relative flex gap-2">
-          <div className="relative flex-1">
+      <form onSubmit={handleSubmit} className="username-search__form w-full max-w-lg">
+        <div className="username-search__controls relative flex gap-2">
+          <div className="username-search__input-wrap relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
@@ -70,16 +70,16 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
         </div>
       </form>
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
+      <div className="username-search__legend flex items-center gap-4 text-xs text-muted-foreground">
+        <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-success" />
           Found
         </span>
-        <span className="flex items-center gap-1">
+        <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-destructive" />
           Not Found
         </span>
-        <span className="flex items-center gap-1">
+        <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-muted-foreground" />
           Checking
         </span>

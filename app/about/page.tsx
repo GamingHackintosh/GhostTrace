@@ -1,0 +1,203 @@
+import type { Metadata } from "next"
+import Link from "next/link"
+import { Ghost, Globe, Radar, Shield, Sparkles, ArrowLeft } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "About GhostTrace",
+  description: "Learn what GhostTrace does and how it presents OSINT username intelligence in English and Russian.",
+}
+
+const featureCards = [
+  {
+    icon: Radar,
+    title: "Username mapping",
+    description:
+      "GhostTrace turns one username into a structured scan across social, developer, gaming, media, and community platforms.",
+  },
+  {
+    icon: Shield,
+    title: "Public-signal mindset",
+    description:
+      "The project is framed around public-facing data and discovery patterns used in open-source intelligence workflows.",
+  },
+  {
+    icon: Sparkles,
+    title: "Readable results",
+    description:
+      "Instead of a raw list of links, the interface groups findings by category and status so the user can read signals faster.",
+  },
+]
+
+const russianSections = [
+  {
+    title: "Что такое GhostTrace",
+    body:
+      "GhostTrace — это визуальный OSINT-инструмент для поиска цифровых следов по username. Пользователь вводит одно имя, а интерфейс показывает, на каких популярных платформах такой профиль может существовать.",
+  },
+  {
+    title: "Для чего он нужен",
+    body:
+      "Проект помогает быстро собрать первичную картину присутствия человека или бренда в сети. Это полезно для исследователей, аналитиков, журналистов, специалистов по безопасности и всех, кто работает с открытыми источниками.",
+  },
+  {
+    title: "Как это выглядит сейчас",
+    body:
+      "Текущая версия делает акцент на интерфейсе, структуре результатов и демонстрации UX. Она показывает, как может выглядеть удобный OSINT-поиск по username, с фильтрацией, категориями и понятной визуализацией статусов.",
+  },
+  {
+    title: "Главная идея",
+    body:
+      "GhostTrace задуман как быстрый, атмосферный и понятный инструмент, который превращает хаотичный поиск по десяткам сайтов в один аккуратный поток данных.",
+  },
+]
+
+const englishSections = [
+  {
+    title: "What GhostTrace is",
+    body:
+      "GhostTrace is a visual OSINT experience for tracing digital footprints by username. A user enters one handle, and the interface maps where that identity may appear across major platforms.",
+  },
+  {
+    title: "Why it matters",
+    body:
+      "The project is useful for early-stage open-source intelligence work. It helps researchers, security teams, journalists, and investigators build a quick picture of a public identity across the web.",
+  },
+  {
+    title: "What this version focuses on",
+    body:
+      "The current build is centered on presentation, interaction design, and result structure. It demonstrates how a username intelligence tool can feel fast, readable, and organized even before deeper platform-specific checks are added.",
+  },
+  {
+    title: "Core philosophy",
+    body:
+      "GhostTrace aims to turn scattered public traces into a single calm interface: one search, multiple platforms, clean categories, and an immediate sense of where to look next.",
+  },
+]
+
+export default function AboutPage() {
+  return (
+    <main className="about-page min-h-screen bg-background">
+      <div className="about-page__background fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.06),_transparent_24%)]" />
+
+      <div className="about-page__container relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-10 sm:px-6 lg:px-8">
+        <header className="about-header flex flex-col gap-6 border-b border-border/50 pb-8 sm:flex-row sm:items-center sm:justify-between">
+          <div className="about-header__brand flex items-center gap-3">
+            <div className="about-header__logo-wrap relative">
+              <Ghost className="h-9 w-9 text-primary" />
+              <div className="about-header__logo-glow absolute inset-0 -z-10 rounded-full bg-primary/20 blur-xl" />
+            </div>
+            <div className="about-header__title-block">
+              <p className="about-header__eyebrow text-sm uppercase tracking-[0.3em] text-muted-foreground">
+                GhostTrace
+              </p>
+              <h1 className="about-header__title text-3xl font-semibold tracking-tight sm:text-4xl">
+                About The Project
+              </h1>
+            </div>
+          </div>
+
+          <div className="about-header__actions flex flex-wrap items-center gap-3 text-sm">
+            <Link
+              href="/"
+              className="about-header__back-link inline-flex items-center gap-2 rounded-full border border-border/60 bg-secondary/40 px-4 py-2 text-foreground transition-colors hover:bg-secondary/70"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Search
+            </Link>
+            <div className="about-header__language-badge inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-primary">
+              <Globe className="h-4 w-4" />
+              RU / EN
+            </div>
+          </div>
+        </header>
+
+        <section className="about-hero grid gap-8 py-10 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="about-hero__content space-y-6">
+            <span className="about-hero__eyebrow inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              <Radar className="h-3.5 w-3.5" />
+              OSINT Username Intelligence
+            </span>
+
+            <div className="about-hero__copy space-y-4">
+              <h2 className="about-hero__title max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+                A cinematic interface for tracing public identity signals across the web.
+              </h2>
+              <p className="about-hero__description max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                GhostTrace is designed to make username-based discovery feel focused,
+                elegant, and useful. It brings scattered platform checks into one
+                readable search flow with category-based structure and immediate visual feedback.
+              </p>
+            </div>
+          </div>
+
+          <div className="about-hero__feature-grid grid gap-4">
+            {featureCards.map(({ icon: Icon, title, description }) => (
+              <article
+                key={title}
+                className="about-feature-card rounded-3xl border border-border/60 bg-card/55 p-5 backdrop-blur-sm transition-colors hover:border-primary/30"
+              >
+                <div className="about-feature-card__icon mb-3 inline-flex rounded-2xl bg-primary/12 p-2 text-primary">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="about-feature-card__title text-lg font-medium">{title}</h3>
+                <p className="about-feature-card__description mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="about-language-grid grid gap-6 pb-16 lg:grid-cols-2">
+          <article className="about-language-card rounded-[2rem] border border-border/60 bg-card/60 p-6 sm:p-8">
+            <div className="about-language-card__header mb-6 flex items-center justify-between gap-3">
+              <div className="about-language-card__title-block">
+                <p className="about-language-card__eyebrow text-sm uppercase tracking-[0.3em] text-muted-foreground">
+                  Русский
+                </p>
+                <h2 className="about-language-card__title mt-2 text-2xl font-semibold">О проекте</h2>
+              </div>
+              <span className="about-language-card__badge rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">
+                RU
+              </span>
+            </div>
+
+            <div className="about-language-card__sections space-y-5">
+              {russianSections.map((section) => (
+                <div key={section.title} className="about-language-card__section rounded-2xl border border-border/50 bg-background/40 p-5">
+                  <h3 className="about-language-card__section-title text-lg font-medium">{section.title}</h3>
+                  <p className="about-language-card__section-text mt-2 text-sm leading-7 text-muted-foreground">
+                    {section.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="about-language-card rounded-[2rem] border border-border/60 bg-card/60 p-6 sm:p-8">
+            <div className="about-language-card__header mb-6 flex items-center justify-between gap-3">
+              <div className="about-language-card__title-block">
+                <p className="about-language-card__eyebrow text-sm uppercase tracking-[0.3em] text-muted-foreground">
+                  English
+                </p>
+                <h2 className="about-language-card__title mt-2 text-2xl font-semibold">About the project</h2>
+              </div>
+              <span className="about-language-card__badge rounded-full border border-border/60 px-3 py-1 text-xs text-muted-foreground">
+                EN
+              </span>
+            </div>
+
+            <div className="about-language-card__sections space-y-5">
+              {englishSections.map((section) => (
+                <div key={section.title} className="about-language-card__section rounded-2xl border border-border/50 bg-background/40 p-5">
+                  <h3 className="about-language-card__section-title text-lg font-medium">{section.title}</h3>
+                  <p className="about-language-card__section-text mt-2 text-sm leading-7 text-muted-foreground">
+                    {section.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+  )
+}
