@@ -6,10 +6,6 @@ export async function checkPlatform(
   username: string,
   checkMethod: CheckMethod
 ) {
-  if (checkMethod === "unsupported") {
-    return { exists: false, url, platform, checked: false, unsupported: true }
-  }
-
   try {
     if (!url || !platform || !username) {
       return { error: "Missing url or platform", exists: false }
@@ -34,6 +30,10 @@ export async function checkPlatform(
 
     return await response.json()
   } catch {
+    if (checkMethod === "unsupported") {
+      return { exists: false, url, platform, checked: false, unsupported: true }
+    }
+
     if (checkMethod === "github-api") {
       try {
         const response = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`)

@@ -104,6 +104,12 @@ export default function AboutPage() {
               <ArrowLeft className="h-4 w-4" />
               Back to Search
             </Link>
+            <Link
+              href="/admin/login"
+              className="about-header__back-link inline-flex items-center gap-2 rounded-full border border-border/60 bg-secondary/40 px-4 py-2 text-foreground transition-colors hover:bg-secondary/70"
+            >
+              Admin
+            </Link>
             <div className="about-header__language-badge inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-primary">
               <Globe className="h-4 w-4" />
               RU / EN

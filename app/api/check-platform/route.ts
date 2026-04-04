@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getPlatformOverride } from "@/lib/feedback-store"
 
 async function checkByHeadStatus(url: string) {
   const response = await fetch(url, {
@@ -34,6 +35,20 @@ export async function POST(request: NextRequest) {
 
     if (!url || !platform || !username || !checkMethod) {
       return NextResponse.json({ error: "Missing request fields" }, { status: 400 })
+    }
+
+    const override = await getPlatformOverride(username, platform)
+
+    if (override) {
+      return NextResponse.json({
+        exists: override.status === "found",
+        url,
+        platform,
+        checked: true,
+        unsupported: override.status === "unsupported",
+        overridden: true,
+        overrideStatus: override.status,
+      })
     }
 
     if (checkMethod === "unsupported") {

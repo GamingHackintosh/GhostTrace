@@ -22,22 +22,13 @@ export default function HomePage() {
       platform: p.name,
       category: p.category,
       url: p.urlTemplate.replace("{username}", username),
-      status: (p.checkMethod === "unsupported" ? "unsupported" : "checking") as ResultStatus,
+      status: "checking" as ResultStatus,
     }))
     setResults(initialResults)
 
     const nextResults = await Promise.all(
       platforms.map(async (platform) => {
         const url = platform.urlTemplate.replace("{username}", username)
-
-        if (platform.checkMethod === "unsupported") {
-          return {
-            platform: platform.name,
-            category: platform.category,
-            url,
-            status: "unsupported" as ResultStatus,
-          }
-        }
 
         try {
           const data = await checkPlatform(url, platform.name, username, platform.checkMethod)
@@ -78,6 +69,9 @@ export default function HomePage() {
           <nav className="home-header__nav flex items-center gap-6 text-sm text-muted-foreground">
             <Link href="/about" className="home-header__link transition-colors hover:text-foreground">
               About
+            </Link>
+            <Link href="/admin/login" className="home-header__link transition-colors hover:text-foreground">
+              Admin
             </Link>
             <a href="#" className="home-header__link transition-colors hover:text-foreground">
               API

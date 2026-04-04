@@ -3,6 +3,7 @@
 import { ExternalLink, Check, X, Loader2, Filter } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { FeedbackReportForm } from "@/components/feedback-report-form"
 import { useState } from "react"
 
 export type ResultStatus = "found" | "not_found" | "checking" | "error" | "unsupported"
@@ -128,7 +129,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       {/* Results Grid */}
       <div className="search-results__grid grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {filteredResults.map((result) => (
-          <ResultCard key={result.platform} result={result} />
+          <ResultCard key={result.platform} result={result} username={username} />
         ))}
       </div>
 
@@ -141,7 +142,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
   )
 }
 
-function ResultCard({ result }: { result: SearchResult }) {
+function ResultCard({ result, username }: { result: SearchResult; username: string }) {
   const statusConfig = {
     found: {
       icon: Check,
@@ -217,6 +218,11 @@ function ResultCard({ result }: { result: SearchResult }) {
           Reliable automatic check is not available for this platform in the current build.
         </p>
       )}
+      <FeedbackReportForm
+        username={username}
+        platform={result.platform}
+        currentStatus={result.status}
+      />
     </div>
   )
 }
