@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -39,6 +40,7 @@ export function FeedbackReportForm({
         suggestedStatus,
         note,
         proofUrl,
+        createdBy: "user",
       })
 
       setSubmitted(true)
@@ -54,7 +56,10 @@ export function FeedbackReportForm({
   if (submitted) {
     return (
       <div className="mt-3 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-xs text-success">
-        Thank you. Your report has been added to the moderation queue.
+        Thank you. Your report has been added to the moderation queue.{" "}
+        <Link href="/tickets" className="underline underline-offset-2">
+          Open queue
+        </Link>
       </div>
     )
   }

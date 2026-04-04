@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
                 Review user reports, confirm profile status manually, and build a cleaner intelligence layer over time.
               </p>
               <p className="text-sm text-muted-foreground">
-                Default local credentials are <code>admin</code> / <code>change-me</code> until you replace them with environment variables.
+                Default local credentials are <code>admin</code> / <code>admin</code>. Legacy password <code>change-me</code> is still accepted in existing browsers.
               </p>
             </div>
 

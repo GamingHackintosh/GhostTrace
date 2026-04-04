@@ -1,18 +1,23 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { UsernameSearch } from "@/components/username-search"
 import { SearchResults, SearchResult, ResultStatus } from "@/components/search-results"
 import { platforms } from "@/lib/platforms"
 import { checkPlatform } from "@/lib/check-platform"
-import { getClientOverride } from "@/lib/client-ticket-store"
+import { getClientOverride, getCurrentAdminUser } from "@/lib/client-ticket-store"
 import { Ghost } from "lucide-react"
 
 export default function HomePage() {
   const [isSearching, setIsSearching] = useState(false)
   const [searchedUsername, setSearchedUsername] = useState<string | null>(null)
   const [results, setResults] = useState<SearchResult[]>([])
+  const [currentAdminUser, setCurrentAdminUser] = useState<string | null>(null)
+
+  useEffect(() => {
+    setCurrentAdminUser(getCurrentAdminUser())
+  }, [])
 
   const handleSearch = useCallback(async (username: string) => {
     setIsSearching(true)
@@ -78,8 +83,16 @@ export default function HomePage() {
             <span className="font-semibold">GhostTrace</span>
           </div>
           <nav className="home-header__nav flex items-center gap-6 text-sm text-muted-foreground">
+            {currentAdminUser ? (
+              <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
+                Admin: {currentAdminUser}
+              </span>
+            ) : null}
             <Link href="/about" className="home-header__link transition-colors hover:text-foreground">
               About
+            </Link>
+            <Link href="/tickets" className="home-header__link transition-colors hover:text-foreground">
+              Tickets
             </Link>
             <Link href="/admin/login" className="home-header__link transition-colors hover:text-foreground">
               Admin

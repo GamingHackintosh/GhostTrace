@@ -4,22 +4,28 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { reviewClientTicket } from "@/lib/client-ticket-store"
+import { reviewClientTicket, type TicketStatus } from "@/lib/client-ticket-store"
 
 interface AdminFeedbackActionsProps {
   feedbackId: string
-  ticketStatus?: "open" | "in_review" | "resolved" | "rejected"
+  ticketStatus?: TicketStatus
+  currentUser?: string | null
   onUpdated?: () => void
 }
 
-export function AdminFeedbackActions({ feedbackId, ticketStatus = "open", onUpdated }: AdminFeedbackActionsProps) {
+export function AdminFeedbackActions({
+  feedbackId,
+  ticketStatus = "new",
+  currentUser,
+  onUpdated,
+}: AdminFeedbackActionsProps) {
   const router = useRouter()
   const [notes, setNotes] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
 
   async function submitReview(
-    action: "start_review" | "reopen" | "approve" | "reject",
+    action: "assign" | "mark_waiting" | "reopen" | "resolve" | "reject",
     finalStatus?: "found" | "not_found" | "unsupported"
   ) {
     setIsSubmitting(true)
@@ -31,8 +37,10 @@ export function AdminFeedbackActions({ feedbackId, ticketStatus = "open", onUpda
         action,
         finalStatus,
         reviewNotes: notes,
+        assignee: currentUser ?? undefined,
       })
 
+      setNotes("")
       onUpdated?.()
       router.refresh()
     } catch {
@@ -54,27 +62,32 @@ export function AdminFeedbackActions({ feedbackId, ticketStatus = "open", onUpda
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
       <div className="flex flex-wrap gap-2">
-        {ticketStatus === "open" && (
-          <Button size="sm" variant="outline" onClick={() => submitReview("start_review")} disabled={isSubmitting}>
-            Start review
+        {ticketStatus === "new" && (
+          <Button size="sm" variant="outline" onClick={() => submitReview("assign")} disabled={isSubmitting}>
+            Назначить мне
           </Button>
         )}
-        {ticketStatus !== "open" && ticketStatus !== "in_review" && (
+        {(ticketStatus === "new" || ticketStatus === "assigned") && (
+          <Button size="sm" variant="outline" onClick={() => submitReview("mark_waiting")} disabled={isSubmitting}>
+            В ожидание
+          </Button>
+        )}
+        {ticketStatus !== "new" && (
           <Button size="sm" variant="outline" onClick={() => submitReview("reopen")} disabled={isSubmitting}>
-            Reopen ticket
+            Вернуть в новые
           </Button>
         )}
-        <Button size="sm" onClick={() => submitReview("approve", "found")} disabled={isSubmitting}>
-          Approve found
+        <Button size="sm" onClick={() => submitReview("resolve", "found")} disabled={isSubmitting}>
+          Решить: found
         </Button>
-        <Button size="sm" variant="secondary" onClick={() => submitReview("approve", "not_found")} disabled={isSubmitting}>
-          Approve not found
+        <Button size="sm" variant="secondary" onClick={() => submitReview("resolve", "not_found")} disabled={isSubmitting}>
+          Решить: not found
         </Button>
-        <Button size="sm" variant="outline" onClick={() => submitReview("approve", "unsupported")} disabled={isSubmitting}>
-          Mark unsupported
+        <Button size="sm" variant="outline" onClick={() => submitReview("resolve", "unsupported")} disabled={isSubmitting}>
+          Решить: unsupported
         </Button>
         <Button size="sm" variant="destructive" onClick={() => submitReview("reject")} disabled={isSubmitting}>
-          Reject
+          Отклонить
         </Button>
       </div>
     </div>

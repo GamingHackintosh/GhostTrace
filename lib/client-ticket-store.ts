@@ -1,5 +1,7 @@
 export type OverrideStatus = "found" | "not_found" | "unsupported"
-export type TicketStatus = "open" | "in_review" | "resolved" | "rejected"
+export type TicketStatus = "new" | "assigned" | "waiting" | "resolved" | "rejected"
+export type TicketReviewState = "pending" | "approved" | "rejected"
+export type TicketCreatedBy = "user" | "admin"
 
 export interface ClientTicketEntry {
   id: string
@@ -12,9 +14,11 @@ export interface ClientTicketEntry {
   proofUrl: string
   createdAt: string
   ticketStatus: TicketStatus
-  reviewState: "pending" | "approved" | "rejected"
+  reviewState: TicketReviewState
   reviewNotes: string
   reviewedAt: string | null
+  createdBy: TicketCreatedBy
+  assignee: string | null
 }
 
 export interface ClientPlatformOverride {
@@ -26,11 +30,16 @@ export interface ClientPlatformOverride {
   updatedAt: string
 }
 
+interface AdminSession {
+  username: string
+  loggedInAt: string
+}
+
 const TICKETS_KEY = "ghostrace_tickets"
 const OVERRIDES_KEY = "ghostrace_overrides"
 const SESSION_KEY = "ghostrace_admin_session"
 const ADMIN_USERNAME = "admin"
-const ADMIN_PASSWORD = "change-me"
+const ADMIN_PASSWORDS = ["admin", "change-me"]
 
 function hasWindow() {
   return typeof window !== "undefined"
@@ -61,11 +70,94 @@ function writeJson<T>(key: string, value: T) {
   window.localStorage.setItem(key, JSON.stringify(value))
 }
 
+function getLegacyStatus(status?: string): TicketStatus {
+  switch (status) {
+    case "open":
+      return "new"
+    case "in_review":
+      return "assigned"
+    case "resolved":
+      return "resolved"
+    case "rejected":
+      return "rejected"
+    case "new":
+    case "assigned":
+    case "waiting":
+      return status
+    default:
+      return "new"
+  }
+}
+
+function readSession() {
+  if (!hasWindow()) {
+    return null
+  }
+
+  const raw = window.localStorage.getItem(SESSION_KEY)
+
+  if (!raw) {
+    return null
+  }
+
+  if (raw === "authenticated") {
+    return {
+      username: ADMIN_USERNAME,
+      loggedInAt: new Date().toISOString(),
+    } satisfies AdminSession
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as AdminSession
+    return parsed.username ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+export function getTicketStatusLabel(status: TicketStatus) {
+  switch (status) {
+    case "new":
+      return "Новый"
+    case "assigned":
+      return "Назначен"
+    case "waiting":
+      return "В ожидании"
+    case "resolved":
+      return "Решен"
+    case "rejected":
+      return "Отклонен"
+    default:
+      return status
+  }
+}
+
+export function getTicketStatusClasses(status: TicketStatus) {
+  switch (status) {
+    case "new":
+      return "border-sky-500/20 bg-sky-500/10 text-sky-600"
+    case "assigned":
+      return "border-primary/20 bg-primary/10 text-primary"
+    case "waiting":
+      return "border-amber-500/20 bg-amber-500/10 text-amber-600"
+    case "resolved":
+      return "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
+    case "rejected":
+      return "border-destructive/20 bg-destructive/10 text-destructive"
+    default:
+      return "border-border/60 bg-background/50 text-muted-foreground"
+  }
+}
+
 export function loginAdmin(username: string, password: string) {
-  const isValid = username === ADMIN_USERNAME && password === ADMIN_PASSWORD
+  const normalizedUsername = username.trim()
+  const isValid = normalizedUsername === ADMIN_USERNAME && ADMIN_PASSWORDS.includes(password)
 
   if (isValid && hasWindow()) {
-    window.localStorage.setItem(SESSION_KEY, "authenticated")
+    writeJson(SESSION_KEY, {
+      username: normalizedUsername,
+      loggedInAt: new Date().toISOString(),
+    } satisfies AdminSession)
   }
 
   return isValid
@@ -78,11 +170,33 @@ export function logoutAdmin() {
 }
 
 export function isAdminLoggedIn() {
-  return hasWindow() && window.localStorage.getItem(SESSION_KEY) === "authenticated"
+  return Boolean(readSession())
+}
+
+export function getCurrentAdminUser() {
+  return readSession()?.username ?? null
 }
 
 export function listClientTickets() {
-  return readJson<ClientTicketEntry[]>(TICKETS_KEY, [])
+  const tickets = readJson<Partial<ClientTicketEntry>[]>(TICKETS_KEY, [])
+
+  return tickets.map((ticket, index) => ({
+    id: ticket.id || crypto.randomUUID(),
+    ticketNumber: ticket.ticketNumber || `GHT-${String(index + 1).padStart(4, "0")}`,
+    username: ticket.username?.trim() || "",
+    platform: ticket.platform?.trim() || "",
+    currentStatus: ticket.currentStatus?.trim() || "unsupported",
+    suggestedStatus: ticket.suggestedStatus || "found",
+    note: ticket.note?.trim() || "",
+    proofUrl: ticket.proofUrl?.trim() || "",
+    createdAt: ticket.createdAt || new Date().toISOString(),
+    ticketStatus: getLegacyStatus(ticket.ticketStatus),
+    reviewState: ticket.reviewState || "pending",
+    reviewNotes: ticket.reviewNotes?.trim() || "",
+    reviewedAt: ticket.reviewedAt || null,
+    createdBy: ticket.createdBy || "user",
+    assignee: ticket.assignee?.trim() || null,
+  }))
 }
 
 export function listClientOverrides() {
@@ -96,6 +210,7 @@ export function createClientTicket(input: {
   suggestedStatus: OverrideStatus
   note?: string
   proofUrl?: string
+  createdBy?: TicketCreatedBy
 }) {
   const tickets = listClientTickets()
   const ticket: ClientTicketEntry = {
@@ -108,10 +223,12 @@ export function createClientTicket(input: {
     note: input.note?.trim() ?? "",
     proofUrl: input.proofUrl?.trim() ?? "",
     createdAt: new Date().toISOString(),
-    ticketStatus: "open",
+    ticketStatus: "new",
     reviewState: "pending",
     reviewNotes: "",
     reviewedAt: null,
+    createdBy: input.createdBy ?? "user",
+    assignee: null,
   }
 
   tickets.unshift(ticket)
@@ -121,9 +238,10 @@ export function createClientTicket(input: {
 
 export function reviewClientTicket(input: {
   feedbackId: string
-  action: "start_review" | "reopen" | "approve" | "reject"
+  action: "assign" | "mark_waiting" | "reopen" | "resolve" | "reject"
   finalStatus?: OverrideStatus
   reviewNotes?: string
+  assignee?: string
 }) {
   const tickets = listClientTickets()
   const overrides = listClientOverrides()
@@ -135,31 +253,41 @@ export function reviewClientTicket(input: {
 
   const ticket = tickets[ticketIndex]
 
-  if (input.action === "start_review") {
+  if (input.action === "assign") {
     tickets[ticketIndex] = {
       ...ticket,
-      ticketStatus: "in_review",
+      ticketStatus: "assigned",
+      assignee: input.assignee?.trim() || ticket.assignee,
+      reviewNotes: input.reviewNotes?.trim() ?? ticket.reviewNotes,
+    }
+  } else if (input.action === "mark_waiting") {
+    tickets[ticketIndex] = {
+      ...ticket,
+      ticketStatus: "waiting",
+      assignee: input.assignee?.trim() || ticket.assignee,
       reviewNotes: input.reviewNotes?.trim() ?? ticket.reviewNotes,
     }
   } else if (input.action === "reopen") {
     tickets[ticketIndex] = {
       ...ticket,
-      ticketStatus: "open",
+      ticketStatus: "new",
       reviewState: "pending",
       reviewNotes: input.reviewNotes?.trim() ?? "",
       reviewedAt: null,
+      assignee: null,
     }
   } else {
     const reviewedAt = new Date().toISOString()
     tickets[ticketIndex] = {
       ...ticket,
-      ticketStatus: input.action === "approve" ? "resolved" : "rejected",
-      reviewState: input.action === "approve" ? "approved" : "rejected",
+      ticketStatus: input.action === "resolve" ? "resolved" : "rejected",
+      reviewState: input.action === "resolve" ? "approved" : "rejected",
       reviewNotes: input.reviewNotes?.trim() ?? "",
       reviewedAt,
+      assignee: input.assignee?.trim() || ticket.assignee,
     }
 
-    if (input.action === "approve" && input.finalStatus) {
+    if (input.action === "resolve" && input.finalStatus) {
       const override = {
         id: crypto.randomUUID(),
         username: ticket.username,

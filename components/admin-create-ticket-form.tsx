@@ -37,6 +37,7 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
       suggestedStatus,
       note,
       proofUrl,
+      createdBy: "admin",
     })
 
     setUsername("")

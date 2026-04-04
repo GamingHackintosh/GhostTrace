@@ -26,7 +26,7 @@ export function AdminLoginForm() {
       router.push("/admin")
       router.refresh()
     } catch {
-      setError("Invalid login or password.")
+      setError("Invalid login or password. Use admin / admin on localhost.")
     } finally {
       setIsSubmitting(false)
     }
