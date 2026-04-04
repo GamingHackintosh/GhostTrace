@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { Search, Ghost, Loader2 } from "lucide-react"
+import { useLanguage } from "@/components/language-provider"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -12,6 +13,7 @@ interface UsernameSearchProps {
 
 export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
   const [username, setUsername] = useState("")
+  const { language } = useLanguage()
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -36,7 +38,9 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
       </div>
       
       <p className="username-search__description max-w-md text-center text-muted-foreground">
-        OSINT Username Intelligence. Enter a username to trace digital footprints across platforms.
+        {language === "ru"
+          ? "OSINT-анализ username. Введите имя пользователя, чтобы проследить цифровые следы по платформам."
+          : "OSINT Username Intelligence. Enter a username to trace digital footprints across platforms."}
       </p>
 
       <form onSubmit={handleSubmit} className="username-search__form w-full max-w-lg">
@@ -45,7 +49,7 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Enter username..."
+              placeholder={language === "ru" ? "Введите username..." : "Enter username..."}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary font-mono"
@@ -61,10 +65,10 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
             {isSearching ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Tracing
+                {language === "ru" ? "Поиск" : "Tracing"}
               </>
             ) : (
-              "Trace"
+              language === "ru" ? "Проверить" : "Trace"
             )}
           </Button>
         </div>
@@ -73,19 +77,19 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
       <div className="username-search__legend flex items-center gap-4 text-xs text-muted-foreground">
         <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-success" />
-          Found
+          {language === "ru" ? "Найден" : "Found"}
         </span>
         <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-destructive" />
-          Not Found
+          {language === "ru" ? "Не найден" : "Not Found"}
         </span>
         <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-muted-foreground" />
-          Checking
+          {language === "ru" ? "Проверка" : "Checking"}
         </span>
         <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-secondary" />
-          Unsupported
+          {language === "ru" ? "Не поддерживается" : "Unsupported"}
         </span>
       </div>
     </div>

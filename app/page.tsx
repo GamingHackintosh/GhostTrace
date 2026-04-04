@@ -2,6 +2,8 @@
 
 import Link from "next/link"
 import { useState, useCallback, useEffect } from "react"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLanguage } from "@/components/language-provider"
 import { UsernameSearch } from "@/components/username-search"
 import { SearchResults, SearchResult, ResultStatus } from "@/components/search-results"
 import { platforms } from "@/lib/platforms"
@@ -14,6 +16,7 @@ export default function HomePage() {
   const [searchedUsername, setSearchedUsername] = useState<string | null>(null)
   const [results, setResults] = useState<SearchResult[]>([])
   const [currentAdminUser, setCurrentAdminUser] = useState<string | null>(null)
+  const { language } = useLanguage()
 
   useEffect(() => {
     setCurrentAdminUser(getCurrentAdminUser())
@@ -85,17 +88,18 @@ export default function HomePage() {
           <nav className="home-header__nav flex items-center gap-6 text-sm text-muted-foreground">
             {currentAdminUser ? (
               <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
-                Admin: {currentAdminUser}
+                {language === "ru" ? `Админ: ${currentAdminUser}` : `Admin: ${currentAdminUser}`}
               </span>
             ) : null}
+            <LanguageSwitcher />
             <Link href="/about" className="home-header__link transition-colors hover:text-foreground">
-              About
+              {language === "ru" ? "О проекте" : "About"}
             </Link>
             <Link href="/tickets" className="home-header__link transition-colors hover:text-foreground">
-              Tickets
+              {language === "ru" ? "Тикеты" : "Tickets"}
             </Link>
             <Link href="/admin/login" className="home-header__link transition-colors hover:text-foreground">
-              Admin
+              {language === "ru" ? "Админ" : "Admin"}
             </Link>
             <a href="#" className="home-header__link transition-colors hover:text-foreground">
               API
@@ -126,7 +130,9 @@ export default function HomePage() {
         {/* Footer */}
         <footer className="home-footer mt-auto pt-16 text-center text-sm text-muted-foreground">
           <p>
-            Only public data from open APIs. For security research purposes only.
+            {language === "ru"
+              ? "Только публичные данные из открытых API. Только для исследовательских и учебных целей."
+              : "Only public data from open APIs. For security research purposes only."}
           </p>
         </footer>
       </div>

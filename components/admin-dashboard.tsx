@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation"
 import { AdminFeedbackActions } from "@/components/admin-feedback-actions"
 import { AdminCreateTicketForm } from "@/components/admin-create-ticket-form"
 import { AdminLogoutButton } from "@/components/admin-logout-button"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import {
   getCurrentAdminUser,
@@ -20,6 +22,7 @@ import {
 
 export function AdminDashboard() {
   const router = useRouter()
+  const { language } = useLanguage()
   const [activeTab, setActiveTab] = useState<"queue" | "create">("queue")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
@@ -45,7 +48,7 @@ export function AdminDashboard() {
         }
       } catch {
         if (!cancelled) {
-          setError("Could not load local admin tickets.")
+          setError(language === "ru" ? "Не удалось загрузить локальные тикеты админки." : "Could not load local admin tickets.")
         }
       } finally {
         if (!cancelled) {
@@ -82,9 +85,13 @@ export function AdminDashboard() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">GhostTrace</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight">Admin ticket queue</h1>
+              <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+                {language === "ru" ? "Очередь тикетов админки" : "Admin ticket queue"}
+              </h1>
               <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                Review user reports, manage manual tickets, and apply verified overrides without leaving static hosting.
+                {language === "ru"
+                  ? "Проверяйте пользовательские отчеты, управляйте ручными тикетами и применяйте подтвержденные overrides без отказа от статического хостинга."
+                  : "Review user reports, manage manual tickets, and apply verified overrides without leaving static hosting."}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Button
@@ -93,7 +100,7 @@ export function AdminDashboard() {
                   variant={activeTab === "queue" ? "default" : "outline"}
                   onClick={() => setActiveTab("queue")}
                 >
-                  Ticket queue
+                  {language === "ru" ? "Очередь тикетов" : "Ticket queue"}
                 </Button>
                 <Button
                   type="button"
@@ -101,23 +108,24 @@ export function AdminDashboard() {
                   variant={activeTab === "create" ? "default" : "outline"}
                   onClick={() => setActiveTab("create")}
                 >
-                  Create ticket
+                  {language === "ru" ? "Создать тикет" : "Create ticket"}
                 </Button>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
-                Signed in as {currentUser ?? "admin"}
+                {language === "ru" ? `Вошли как ${currentUser ?? "admin"}` : `Signed in as ${currentUser ?? "admin"}`}
               </span>
+              <LanguageSwitcher />
               <Link href="/" className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent">
-                Homepage
+                {language === "ru" ? "Главная" : "Homepage"}
               </Link>
               <Link
                 href="/tickets"
                 className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-accent"
               >
-                Public tickets
+                {language === "ru" ? "Публичные тикеты" : "Public tickets"}
               </Link>
               <AdminLogoutButton />
             </div>
@@ -134,7 +142,7 @@ export function AdminDashboard() {
 
         {isLoading ? (
           <div className="rounded-3xl border border-border/60 bg-card/60 p-6 text-sm text-muted-foreground">
-            Loading admin dashboard...
+            {language === "ru" ? "Загрузка админ-панели..." : "Loading admin dashboard..."}
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-6 text-sm text-amber-700">
@@ -152,9 +160,9 @@ export function AdminDashboard() {
             <aside className="rounded-3xl border border-border/60 bg-card/60 p-6">
               <h2 className="text-xl font-medium">Workflow</h2>
               <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                <p>Users can open tickets from result cards or from the public tickets page.</p>
-                <p>Admins can create internal tickets manually, assign them, move them to waiting, and resolve them into overrides.</p>
-                <p>All queue data stays in local storage, so localhost and static hosting remain supported.</p>
+                <p>{language === "ru" ? "Пользователи могут создавать тикеты из карточек результатов или с публичной страницы очереди." : "Users can open tickets from result cards or from the public tickets page."}</p>
+                <p>{language === "ru" ? "Администраторы могут вручную создавать внутренние тикеты, назначать их, переводить в ожидание и завершать с созданием override." : "Admins can create internal tickets manually, assign them, move them to waiting, and resolve them into overrides."}</p>
+                <p>{language === "ru" ? "Все данные очереди остаются в localStorage, поэтому localhost и static hosting продолжают работать." : "All queue data stays in local storage, so localhost and static hosting remain supported."}</p>
               </div>
             </aside>
           </section>
@@ -162,37 +170,49 @@ export function AdminDashboard() {
           <section className="grid gap-6 xl:grid-cols-[1.4fr_0.6fr]">
             <div className="space-y-6">
               <TicketSection
-                title="New tickets"
-                description={`${newTickets.length} ticket(s) waiting for assignment`}
+                title={language === "ru" ? "Новые тикеты" : "New tickets"}
+                description={
+                  language === "ru"
+                    ? `${newTickets.length} тикет(ов) ждут назначения`
+                    : `${newTickets.length} ticket(s) waiting for assignment`
+                }
                 tickets={newTickets}
-                emptyMessage="No new tickets right now."
+                emptyMessage={language === "ru" ? "Сейчас нет новых тикетов." : "No new tickets right now."}
                 currentUser={currentUser}
                 onUpdated={reloadDashboard}
               />
 
               <TicketSection
-                title="Assigned tickets"
-                description={`${assignedTickets.length} ticket(s) currently owned by an admin`}
+                title={language === "ru" ? "Назначенные тикеты" : "Assigned tickets"}
+                description={
+                  language === "ru"
+                    ? `${assignedTickets.length} тикет(ов) сейчас закреплены за администратором`
+                    : `${assignedTickets.length} ticket(s) currently owned by an admin`
+                }
                 tickets={assignedTickets}
-                emptyMessage="No assigned tickets."
+                emptyMessage={language === "ru" ? "Нет назначенных тикетов." : "No assigned tickets."}
                 currentUser={currentUser}
                 onUpdated={reloadDashboard}
               />
 
               <TicketSection
-                title="Waiting tickets"
-                description={`${waitingTickets.length} ticket(s) paused and waiting for confirmation`}
+                title={language === "ru" ? "Тикеты в ожидании" : "Waiting tickets"}
+                description={
+                  language === "ru"
+                    ? `${waitingTickets.length} тикет(ов) ожидают дополнительного подтверждения`
+                    : `${waitingTickets.length} ticket(s) paused and waiting for confirmation`
+                }
                 tickets={waitingTickets}
-                emptyMessage="No tickets are in waiting status."
+                emptyMessage={language === "ru" ? "Нет тикетов в статусе ожидания." : "No tickets are in waiting status."}
                 currentUser={currentUser}
                 onUpdated={reloadDashboard}
               />
 
               <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
-                <h2 className="text-xl font-medium">Reviewed tickets</h2>
+                <h2 className="text-xl font-medium">{language === "ru" ? "Обработанные тикеты" : "Reviewed tickets"}</h2>
                 <div className="mt-4 space-y-3">
                   {reviewedTickets.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No reviewed tickets yet.</p>
+                    <p className="text-sm text-muted-foreground">{language === "ru" ? "Пока нет обработанных тикетов." : "No reviewed tickets yet."}</p>
                   ) : (
                     reviewedTickets.map((entry) => (
                       <TicketCard
@@ -210,29 +230,31 @@ export function AdminDashboard() {
 
             <aside className="space-y-6">
               <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
-                <h2 className="text-xl font-medium">Queue overview</h2>
+                <h2 className="text-xl font-medium">{language === "ru" ? "Сводка по очереди" : "Queue overview"}</h2>
                 <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                  <p>Tickets from users and admin-created tasks share the same queue and lifecycle.</p>
-                  <p>Recommended flow: assign ticket, gather proof, move to waiting if needed, then resolve or reject.</p>
+                  <p>{language === "ru" ? "Тикеты от пользователей и задачи, созданные админом, используют одну и ту же очередь и жизненный цикл." : "Tickets from users and admin-created tasks share the same queue and lifecycle."}</p>
+                  <p>{language === "ru" ? "Рекомендуемый процесс: назначить тикет, собрать доказательства, при необходимости перевести в ожидание, затем решить или отклонить." : "Recommended flow: assign ticket, gather proof, move to waiting if needed, then resolve or reject."}</p>
                 </div>
               </div>
 
               <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
-                <h2 className="text-xl font-medium">Active overrides</h2>
+                <h2 className="text-xl font-medium">{language === "ru" ? "Активные overrides" : "Active overrides"}</h2>
                 <div className="mt-4 space-y-3">
                   {overrides.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No manual overrides yet.</p>
+                    <p className="text-sm text-muted-foreground">{language === "ru" ? "Пока нет ручных overrides." : "No manual overrides yet."}</p>
                   ) : (
                     overrides.map((entry) => (
                       <div key={entry.id} className="rounded-2xl border border-border/50 bg-background/50 p-4 text-sm">
                         <p className="font-medium">
                           {entry.platform} / <span className="font-mono">{entry.username}</span>
                         </p>
-                        <p className="mt-1 text-muted-foreground">Status: {entry.status}</p>
+                        <p className="mt-1 text-muted-foreground">{language === "ru" ? "Статус" : "Status"}: {entry.status}</p>
                         <p className="mt-1 text-muted-foreground">
-                          Updated: {new Date(entry.updatedAt).toLocaleString()}
+                          {language === "ru" ? "Обновлено" : "Updated"}: {new Date(entry.updatedAt).toLocaleString()}
                         </p>
-                        <p className="mt-1 text-muted-foreground">Notes: {entry.note || "No notes"}</p>
+                        <p className="mt-1 text-muted-foreground">
+                          {language === "ru" ? "Заметки" : "Notes"}: {entry.note || (language === "ru" ? "Нет заметок" : "No notes")}
+                        </p>
                       </div>
                     ))
                   )}
@@ -286,6 +308,7 @@ function TicketSection({
   currentUser: string | null
   onUpdated: () => void
 }) {
+  const { language } = useLanguage()
   return (
     <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
       <h2 className="text-xl font-medium">{title}</h2>
@@ -322,6 +345,7 @@ function TicketCard({
   onUpdated: () => void
   compact?: boolean
 }) {
+  const { language } = useLanguage()
   return (
     <article className="space-y-4 rounded-2xl border border-border/60 bg-background/50 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -339,34 +363,40 @@ function TicketCard({
             {getTicketStatusLabel(ticket.ticketStatus)}
           </span>
           <span className="rounded-full border border-border/60 bg-background/70 px-3 py-1 text-xs text-muted-foreground">
-            {ticket.createdBy === "admin" ? "Admin ticket" : "User ticket"}
+            {ticket.createdBy === "admin"
+              ? language === "ru"
+                ? "Тикет администратора"
+                : "Admin ticket"
+              : language === "ru"
+                ? "Пользовательский тикет"
+                : "User ticket"}
           </span>
         </div>
       </div>
 
       <div className="grid gap-3 text-sm text-muted-foreground">
         <p>
-          <strong className="text-foreground">Submitted:</strong> {new Date(ticket.createdAt).toLocaleString()}
+          <strong className="text-foreground">{language === "ru" ? "Создан" : "Submitted"}:</strong> {new Date(ticket.createdAt).toLocaleString()}
         </p>
         <p>
-          <strong className="text-foreground">Assignee:</strong> {ticket.assignee || "Unassigned"}
+          <strong className="text-foreground">{language === "ru" ? "Исполнитель" : "Assignee"}:</strong> {ticket.assignee || (language === "ru" ? "Не назначен" : "Unassigned")}
         </p>
         <p>
-          <strong className="text-foreground">Note:</strong> {ticket.note || "No note provided"}
+          <strong className="text-foreground">{language === "ru" ? "Комментарий" : "Note"}:</strong> {ticket.note || (language === "ru" ? "Комментарий не указан" : "No note provided")}
         </p>
         <p>
-          <strong className="text-foreground">Proof:</strong>{" "}
+          <strong className="text-foreground">{language === "ru" ? "Доказательство" : "Proof"}:</strong>{" "}
           {ticket.proofUrl ? (
             <a href={ticket.proofUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
               {ticket.proofUrl}
             </a>
           ) : (
-            "No proof URL"
+            language === "ru" ? "Нет ссылки" : "No proof URL"
           )}
         </p>
         {ticket.reviewNotes ? (
           <p>
-            <strong className="text-foreground">Review notes:</strong> {ticket.reviewNotes}
+            <strong className="text-foreground">{language === "ru" ? "Заметки модерации" : "Review notes"}:</strong> {ticket.reviewNotes}
           </p>
         ) : null}
       </div>

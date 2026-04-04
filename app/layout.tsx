@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import SmoothScroll from '../components/smooth-scroll'
 import CustomCursor from '../components/custom-cursor'
+import { LanguageProvider } from '../components/language-provider'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -25,10 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <SmoothScroll />
-        <CustomCursor />
-        {children}
-        <Analytics />
+        <LanguageProvider>
+          <SmoothScroll />
+          <CustomCursor />
+          {children}
+          <Analytics />
+        </LanguageProvider>
       </body>
     </html>
   )

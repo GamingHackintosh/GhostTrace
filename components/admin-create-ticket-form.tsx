@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -11,6 +12,7 @@ interface AdminCreateTicketFormProps {
 }
 
 export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps) {
+  const { language } = useLanguage()
   const [username, setUsername] = useState("")
   const [platform, setPlatform] = useState("")
   const [currentStatus, setCurrentStatus] = useState("unsupported")
@@ -26,7 +28,7 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
     setSuccess("")
 
     if (!username.trim() || !platform.trim()) {
-      setError("Username and platform are required.")
+      setError(language === "ru" ? "Username и платформа обязательны." : "Username and platform are required.")
       return
     }
 
@@ -46,7 +48,7 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
     setSuggestedStatus("found")
     setNote("")
     setProofUrl("")
-    setSuccess("Ticket created and added to the queue.")
+    setSuccess(language === "ru" ? "Тикет создан и добавлен в очередь." : "Ticket created and added to the queue.")
     onCreated?.()
   }
 
@@ -59,14 +61,14 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">Platform</label>
+          <label className="text-sm text-muted-foreground">{language === "ru" ? "Платформа" : "Platform"}</label>
           <Input value={platform} onChange={(event) => setPlatform(event.target.value)} placeholder="GitHub" />
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">Current status</label>
+          <label className="text-sm text-muted-foreground">{language === "ru" ? "Текущий статус" : "Current status"}</label>
           <Input
             value={currentStatus}
             onChange={(event) => setCurrentStatus(event.target.value)}
@@ -75,32 +77,32 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">Suggested status</label>
+          <label className="text-sm text-muted-foreground">{language === "ru" ? "Ожидаемый статус" : "Suggested status"}</label>
           <div className="flex flex-wrap gap-2">
             <Button type="button" size="sm" variant={suggestedStatus === "found" ? "default" : "outline"} onClick={() => setSuggestedStatus("found")}>
-              Found
+              {language === "ru" ? "Найден" : "Found"}
             </Button>
             <Button type="button" size="sm" variant={suggestedStatus === "not_found" ? "default" : "outline"} onClick={() => setSuggestedStatus("not_found")}>
-              Not found
+              {language === "ru" ? "Не найден" : "Not found"}
             </Button>
             <Button type="button" size="sm" variant={suggestedStatus === "unsupported" ? "default" : "outline"} onClick={() => setSuggestedStatus("unsupported")}>
-              Unsupported
+              {language === "ru" ? "Не поддерживается" : "Unsupported"}
             </Button>
           </div>
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-muted-foreground">Proof URL</label>
+        <label className="text-sm text-muted-foreground">{language === "ru" ? "Ссылка-доказательство" : "Proof URL"}</label>
         <Input value={proofUrl} onChange={(event) => setProofUrl(event.target.value)} placeholder="https://example.com/profile" />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-muted-foreground">Admin note</label>
+        <label className="text-sm text-muted-foreground">{language === "ru" ? "Комментарий администратора" : "Admin note"}</label>
         <Textarea
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          placeholder="Describe why this ticket should be created."
+          placeholder={language === "ru" ? "Опишите, зачем нужно создать этот тикет." : "Describe why this ticket should be created."}
           className="min-h-28"
         />
       </div>
@@ -108,7 +110,7 @@ export function AdminCreateTicketForm({ onCreated }: AdminCreateTicketFormProps)
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       {success ? <p className="text-sm text-success">{success}</p> : null}
 
-      <Button type="submit">Create ticket</Button>
+      <Button type="submit">{language === "ru" ? "Создать тикет" : "Create ticket"}</Button>
     </form>
   )
 }

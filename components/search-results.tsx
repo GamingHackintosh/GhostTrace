@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FeedbackReportForm } from "@/components/feedback-report-form"
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 
 export type ResultStatus = "found" | "not_found" | "checking" | "error" | "unsupported"
 
@@ -23,6 +24,7 @@ interface SearchResultsProps {
 export function SearchResults({ results, username }: SearchResultsProps) {
   const [filterStatus, setFilterStatus] = useState<ResultStatus | "all">("all")
   const [filterCategory, setFilterCategory] = useState<string>("all")
+  const { language } = useLanguage()
 
   const categories = [...new Set(results.map((r) => r.category))]
   
@@ -42,7 +44,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       {/* Stats Bar */}
       <div className="search-results__stats-bar flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border/50 bg-card p-4">
         <div className="search-results__username flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Tracing:</span>
+          <span className="text-sm text-muted-foreground">{language === "ru" ? "Проверка:" : "Tracing:"}</span>
           <code className="search-results__username-code rounded bg-secondary px-2 py-1 text-sm font-mono text-primary">
             {username}
           </code>
@@ -51,23 +53,27 @@ export function SearchResults({ results, username }: SearchResultsProps) {
           <span className="search-results__stat-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-success" />
             <span className="text-success font-medium">{foundCount}</span>
-            <span className="text-muted-foreground">found</span>
+            <span className="text-muted-foreground">{language === "ru" ? "найдено" : "found"}</span>
           </span>
           <span className="search-results__stat-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-destructive" />
             <span className="text-destructive font-medium">{notFoundCount}</span>
-            <span className="text-muted-foreground">not found</span>
+            <span className="text-muted-foreground">{language === "ru" ? "не найдено" : "not found"}</span>
           </span>
           {checkingCount > 0 && (
             <span className="search-results__stat-item flex items-center gap-1.5">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-              <span className="text-muted-foreground">{checkingCount} checking</span>
+              <span className="text-muted-foreground">
+                {checkingCount} {language === "ru" ? "в проверке" : "checking"}
+              </span>
             </span>
           )}
           {unsupportedCount > 0 && (
             <span className="search-results__stat-item flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/70" />
-              <span className="text-muted-foreground">{unsupportedCount} unsupported</span>
+              <span className="text-muted-foreground">
+                {unsupportedCount} {language === "ru" ? "не поддерживается" : "unsupported"}
+              </span>
             </span>
           )}
         </div>
@@ -83,7 +89,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             onClick={() => setFilterStatus("all")}
             className="h-7 text-xs"
           >
-            All
+            {language === "ru" ? "Все" : "All"}
           </Button>
           <Button
             variant={filterStatus === "found" ? "default" : "outline"}
@@ -91,7 +97,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             onClick={() => setFilterStatus("found")}
             className="h-7 text-xs"
           >
-            Found
+            {language === "ru" ? "Найден" : "Found"}
           </Button>
           <Button
             variant={filterStatus === "not_found" ? "default" : "outline"}
@@ -99,7 +105,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             onClick={() => setFilterStatus("not_found")}
             className="h-7 text-xs"
           >
-            Not Found
+            {language === "ru" ? "Не найден" : "Not Found"}
           </Button>
         </div>
         <div className="search-results__filters-divider mx-2 h-4 w-px bg-border" />
@@ -110,7 +116,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             onClick={() => setFilterCategory("all")}
             className="h-7 text-xs"
           >
-            All Categories
+            {language === "ru" ? "Все категории" : "All Categories"}
           </Button>
           {categories.map((cat) => (
             <Button
@@ -135,7 +141,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
 
       {filteredResults.length === 0 && (
         <div className="search-results__empty-state py-12 text-center text-muted-foreground">
-          No results match your filters
+          {language === "ru" ? "Нет результатов по выбранным фильтрам" : "No results match your filters"}
         </div>
       )}
     </div>
@@ -143,6 +149,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
 }
 
 function ResultCard({ result, username }: { result: SearchResult; username: string }) {
+  const { language } = useLanguage()
   const statusConfig = {
     found: {
       icon: Check,
@@ -215,7 +222,9 @@ function ResultCard({ result, username }: { result: SearchResult; username: stri
       )}
       {result.status === "unsupported" && (
         <p className="search-results__card-url mt-2 text-xs text-muted-foreground">
-          Reliable automatic check is not available for this platform in the current build.
+          {language === "ru"
+            ? "Надежная автоматическая проверка для этой платформы пока недоступна в текущей версии."
+            : "Reliable automatic check is not available for this platform in the current build."}
         </p>
       )}
       <FeedbackReportForm

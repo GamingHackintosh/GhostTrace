@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -19,6 +20,7 @@ export function FeedbackReportForm({
   platform,
   currentStatus,
 }: FeedbackReportFormProps) {
+  const { language } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -56,9 +58,11 @@ export function FeedbackReportForm({
   if (submitted) {
     return (
       <div className="mt-3 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-xs text-success">
-        Thank you. Your report has been added to the moderation queue.{" "}
+        {language === "ru"
+          ? "Спасибо. Ваш отзыв добавлен в очередь модерации. "
+          : "Thank you. Your report has been added to the moderation queue. "}
         <Link href="/tickets" className="underline underline-offset-2">
-          Open queue
+          {language === "ru" ? "Открыть очередь" : "Open queue"}
         </Link>
       </div>
     )
@@ -74,7 +78,7 @@ export function FeedbackReportForm({
           className="h-7 px-2 text-xs text-muted-foreground"
           onClick={() => setIsOpen(true)}
         >
-          Report issue
+          {language === "ru" ? "Сообщить об ошибке" : "Report issue"}
         </Button>
       ) : (
         <form
@@ -89,7 +93,7 @@ export function FeedbackReportForm({
               className="h-7 text-xs"
               onClick={() => setSuggestedStatus("found")}
             >
-              Profile exists
+              {language === "ru" ? "Профиль существует" : "Profile exists"}
             </Button>
             <Button
               type="button"
@@ -98,7 +102,7 @@ export function FeedbackReportForm({
               className="h-7 text-xs"
               onClick={() => setSuggestedStatus("not_found")}
             >
-              Profile not found
+              {language === "ru" ? "Профиль не найден" : "Profile not found"}
             </Button>
             <Button
               type="button"
@@ -107,29 +111,33 @@ export function FeedbackReportForm({
               className="h-7 text-xs"
               onClick={() => setSuggestedStatus("unsupported")}
             >
-              Mark unsupported
+              {language === "ru" ? "Не поддерживается" : "Mark unsupported"}
             </Button>
           </div>
 
           <Textarea
             value={note}
             onChange={(event) => setNote(event.target.value)}
-            placeholder="Tell us what is wrong and what should be corrected."
+            placeholder={
+              language === "ru"
+                ? "Опишите, что неверно и что нужно исправить."
+                : "Tell us what is wrong and what should be corrected."
+            }
             className="min-h-20 text-sm"
           />
 
           <Input
             value={proofUrl}
             onChange={(event) => setProofUrl(event.target.value)}
-            placeholder="Proof URL (optional)"
+            placeholder={language === "ru" ? "Ссылка-доказательство (необязательно)" : "Proof URL (optional)"}
             className="text-sm"
           />
 
-          {error ? <p className="text-xs text-destructive">{error}</p> : null}
+          {error ? <p className="text-xs text-destructive">{language === "ru" ? "Сейчас не удалось отправить отзыв." : error}</p> : null}
 
           <div className="flex gap-2">
             <Button type="submit" size="sm" className="h-8" disabled={isSubmitting}>
-              {isSubmitting ? "Sending..." : "Send report"}
+              {isSubmitting ? (language === "ru" ? "Отправка..." : "Sending...") : language === "ru" ? "Отправить" : "Send report"}
             </Button>
             <Button
               type="button"
@@ -139,7 +147,7 @@ export function FeedbackReportForm({
               onClick={() => setIsOpen(false)}
               disabled={isSubmitting}
             >
-              Cancel
+              {language === "ru" ? "Отмена" : "Cancel"}
             </Button>
           </div>
         </form>

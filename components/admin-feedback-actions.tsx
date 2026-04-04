@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { reviewClientTicket, type TicketStatus } from "@/lib/client-ticket-store"
@@ -20,6 +21,7 @@ export function AdminFeedbackActions({
   onUpdated,
 }: AdminFeedbackActionsProps) {
   const router = useRouter()
+  const { language } = useLanguage()
   const [notes, setNotes] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
@@ -44,7 +46,7 @@ export function AdminFeedbackActions({
       onUpdated?.()
       router.refresh()
     } catch {
-      setError("Could not update the ticket.")
+      setError(language === "ru" ? "Не удалось обновить тикет." : "Could not update the ticket.")
     } finally {
       setIsSubmitting(false)
     }
@@ -55,7 +57,7 @@ export function AdminFeedbackActions({
       <Textarea
         value={notes}
         onChange={(event) => setNotes(event.target.value)}
-        placeholder="Admin notes"
+        placeholder={language === "ru" ? "Заметки администратора" : "Admin notes"}
         className="min-h-20 text-sm"
       />
 
@@ -64,30 +66,30 @@ export function AdminFeedbackActions({
       <div className="flex flex-wrap gap-2">
         {ticketStatus === "new" && (
           <Button size="sm" variant="outline" onClick={() => submitReview("assign")} disabled={isSubmitting}>
-            Назначить мне
+            {language === "ru" ? "Назначить мне" : "Assign to me"}
           </Button>
         )}
         {(ticketStatus === "new" || ticketStatus === "assigned") && (
           <Button size="sm" variant="outline" onClick={() => submitReview("mark_waiting")} disabled={isSubmitting}>
-            В ожидание
+            {language === "ru" ? "В ожидание" : "Move to waiting"}
           </Button>
         )}
         {ticketStatus !== "new" && (
           <Button size="sm" variant="outline" onClick={() => submitReview("reopen")} disabled={isSubmitting}>
-            Вернуть в новые
+            {language === "ru" ? "Вернуть в новые" : "Reopen"}
           </Button>
         )}
         <Button size="sm" onClick={() => submitReview("resolve", "found")} disabled={isSubmitting}>
-          Решить: found
+          {language === "ru" ? "Решить: найден" : "Resolve: found"}
         </Button>
         <Button size="sm" variant="secondary" onClick={() => submitReview("resolve", "not_found")} disabled={isSubmitting}>
-          Решить: not found
+          {language === "ru" ? "Решить: не найден" : "Resolve: not found"}
         </Button>
         <Button size="sm" variant="outline" onClick={() => submitReview("resolve", "unsupported")} disabled={isSubmitting}>
-          Решить: unsupported
+          {language === "ru" ? "Решить: unsupported" : "Resolve: unsupported"}
         </Button>
         <Button size="sm" variant="destructive" onClick={() => submitReview("reject")} disabled={isSubmitting}>
-          Отклонить
+          {language === "ru" ? "Отклонить" : "Reject"}
         </Button>
       </div>
     </div>
