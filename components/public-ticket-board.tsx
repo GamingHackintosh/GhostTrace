@@ -66,10 +66,10 @@ export function PublicTicketBoard() {
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_1.1fr]">
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl border border-border/60 bg-card/60 p-6">
+      <form onSubmit={handleSubmit} className="space-y-4 rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-6">
         <div>
           <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">GhostTrace Queue</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">{language === "ru" ? "Создать публичный тикет" : "Create a public ticket"}</h2>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">{language === "ru" ? "Создать публичный тикет" : "Create a public ticket"}</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             {language === "ru"
               ? "Используйте эту форму, если автоматический результат неверен или вы хотите запросить ручную проверку."
@@ -134,11 +134,11 @@ export function PublicTicketBoard() {
         <Button type="submit">{language === "ru" ? "Отправить тикет" : "Submit ticket"}</Button>
       </form>
 
-      <section className="rounded-3xl border border-border/60 bg-card/60 p-6">
-        <div className="flex items-end justify-between gap-4">
+      <section className="rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-6">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground">{language === "ru" ? "Очередь" : "Queue"}</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">{language === "ru" ? "Видимая очередь тикетов" : "Visible ticket backlog"}</h2>
+            <h2 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">{language === "ru" ? "Видимая очередь тикетов" : "Visible ticket backlog"}</h2>
           </div>
           <Button type="button" size="sm" variant="outline" onClick={reloadTickets}>
             {language === "ru" ? "Обновить" : "Refresh"}
@@ -154,7 +154,7 @@ export function PublicTicketBoard() {
             </div>
           ) : (
             tickets.map((ticket) => (
-              <article key={ticket.id} className="rounded-2xl border border-border/60 bg-background/50 p-5">
+              <article key={ticket.id} className="rounded-2xl border border-border/60 bg-background/50 p-4 sm:p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{ticket.ticketNumber}</p>
@@ -167,7 +167,7 @@ export function PublicTicketBoard() {
                   </span>
                 </div>
 
-                <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
+                <div className="mt-3 grid gap-2 break-words text-sm text-muted-foreground">
                   <p>
                     <strong className="text-foreground">{language === "ru" ? "Текущий" : "Current"}:</strong> {ticket.currentStatus}
                   </p>

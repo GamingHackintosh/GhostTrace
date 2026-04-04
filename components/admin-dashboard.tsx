@@ -80,7 +80,7 @@ export function AdminDashboard() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
         <header className="mb-10 flex flex-col gap-4 border-b border-border/60 pb-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -113,7 +113,7 @@ export function AdminDashboard() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
               <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
                 {language === "ru" ? `Вошли как ${currentUser ?? "admin"}` : `Signed in as ${currentUser ?? "admin"}`}
               </span>
@@ -131,7 +131,7 @@ export function AdminDashboard() {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
             <StatusCard label="Новые" value={newTickets.length} tone="sky" />
             <StatusCard label="Назначенные" value={assignedTickets.length} tone="primary" />
             <StatusCard label="В ожидании" value={waitingTickets.length} tone="amber" />
@@ -288,7 +288,7 @@ function StatusCard({
   return (
     <div className={`rounded-2xl border p-4 ${classes[tone]}`}>
       <p className="text-xs uppercase tracking-[0.2em]">{label}</p>
-      <p className="mt-2 text-3xl font-semibold">{value}</p>
+      <p className="mt-2 text-2xl font-semibold sm:text-3xl">{value}</p>
     </div>
   )
 }
@@ -310,7 +310,7 @@ function TicketSection({
 }) {
   const { language } = useLanguage()
   return (
-    <div className="rounded-3xl border border-border/60 bg-card/60 p-6">
+    <div className="rounded-3xl border border-border/60 bg-card/60 p-4 sm:p-6">
       <h2 className="text-xl font-medium">{title}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{description}</p>
 
@@ -347,7 +347,7 @@ function TicketCard({
 }) {
   const { language } = useLanguage()
   return (
-    <article className="space-y-4 rounded-2xl border border-border/60 bg-background/50 p-5">
+    <article className="space-y-4 rounded-2xl border border-border/60 bg-background/50 p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{ticket.ticketNumber}</p>
@@ -374,7 +374,7 @@ function TicketCard({
         </div>
       </div>
 
-      <div className="grid gap-3 text-sm text-muted-foreground">
+      <div className="grid gap-3 break-words text-sm text-muted-foreground">
         <p>
           <strong className="text-foreground">{language === "ru" ? "Создан" : "Submitted"}:</strong> {new Date(ticket.createdAt).toLocaleString()}
         </p>

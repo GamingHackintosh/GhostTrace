@@ -12,12 +12,12 @@ export function TicketsPageContent() {
   return (
     <main className="min-h-screen bg-background">
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_30%)]" />
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <header className="mb-10 flex flex-col gap-4 border-b border-border/60 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="flex items-center gap-3">
               <Ghost className="h-8 w-8 text-primary" />
-              <h1 className="text-4xl font-semibold tracking-tight">
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 {language === "ru" ? "Тикеты GhostTrace" : "GhostTrace Tickets"}
               </h1>
             </div>

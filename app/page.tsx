@@ -78,14 +78,14 @@ export default function HomePage() {
       {/* Background effects */}
       <div className="home-page__background fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background pointer-events-none" />
       
-      <div className="home-page__container relative flex flex-col items-center px-4 py-16">
+      <div className="home-page__container relative flex flex-col items-center px-4 py-10 sm:py-16">
         {/* Header */}
-        <header className="home-header mb-16 flex w-full max-w-4xl items-center justify-between">
+        <header className="home-header mb-10 flex w-full max-w-4xl flex-col items-start gap-5 sm:mb-16 lg:flex-row lg:items-center lg:justify-between">
           <div className="home-header__brand flex items-center gap-2">
             <Ghost className="h-6 w-6 text-primary" />
             <span className="font-semibold">GhostTrace</span>
           </div>
-          <nav className="home-header__nav flex items-center gap-6 text-sm text-muted-foreground">
+          <nav className="home-header__nav flex w-full flex-wrap items-center gap-3 text-sm text-muted-foreground lg:w-auto lg:justify-end lg:gap-6">
             {currentAdminUser ? (
               <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs text-primary">
                 {language === "ru" ? `Админ: ${currentAdminUser}` : `Admin: ${currentAdminUser}`}
@@ -116,7 +116,7 @@ export default function HomePage() {
         </header>
 
         {/* Search Section */}
-        <section className={`home-search-section transition-all duration-500 ${searchedUsername ? "mb-12" : "mt-24"}`}>
+        <section className={`home-search-section w-full transition-all duration-500 ${searchedUsername ? "mb-10 sm:mb-12" : "mt-8 sm:mt-24"}`}>
           <UsernameSearch onSearch={handleSearch} isSearching={isSearching} />
         </section>
 

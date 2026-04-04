@@ -40,16 +40,16 @@ export function SearchResults({ results, username }: SearchResultsProps) {
   const unsupportedCount = results.filter((r) => r.status === "unsupported").length
 
   return (
-    <div className="search-results w-full max-w-4xl space-y-6">
+    <div className="search-results w-full max-w-4xl space-y-6 overflow-hidden">
       {/* Stats Bar */}
-      <div className="search-results__stats-bar flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border/50 bg-card p-4">
-        <div className="search-results__username flex items-center gap-2">
+      <div className="search-results__stats-bar flex flex-col gap-4 rounded-lg border border-border/50 bg-card p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="search-results__username flex min-w-0 items-center gap-2">
           <span className="text-sm text-muted-foreground">{language === "ru" ? "Проверка:" : "Tracing:"}</span>
           <code className="search-results__username-code rounded bg-secondary px-2 py-1 text-sm font-mono text-primary">
             {username}
           </code>
         </div>
-        <div className="search-results__stats flex items-center gap-4 text-sm">
+        <div className="search-results__stats flex flex-wrap items-center gap-3 text-sm">
           <span className="search-results__stat-item flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-success" />
             <span className="text-success font-medium">{foundCount}</span>
@@ -80,9 +80,9 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Filters */}
-      <div className="search-results__filters flex flex-wrap items-center gap-2">
+      <div className="search-results__filters flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <Filter className="h-4 w-4 text-muted-foreground" />
-        <div className="search-results__status-filters flex flex-wrap gap-2">
+        <div className="search-results__status-filters flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant={filterStatus === "all" ? "default" : "outline"}
             size="sm"
@@ -108,8 +108,8 @@ export function SearchResults({ results, username }: SearchResultsProps) {
             {language === "ru" ? "Не найден" : "Not Found"}
           </Button>
         </div>
-        <div className="search-results__filters-divider mx-2 h-4 w-px bg-border" />
-        <div className="search-results__category-filters flex flex-wrap gap-2">
+        <div className="search-results__filters-divider hidden h-4 w-px bg-border sm:mx-2 sm:block" />
+        <div className="search-results__category-filters flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant={filterCategory === "all" ? "secondary" : "ghost"}
             size="sm"
@@ -133,7 +133,7 @@ export function SearchResults({ results, username }: SearchResultsProps) {
       </div>
 
       {/* Results Grid */}
-      <div className="search-results__grid grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="search-results__grid grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {filteredResults.map((result) => (
           <ResultCard key={result.platform} result={result} username={username} />
         ))}
@@ -188,7 +188,7 @@ function ResultCard({ result, username }: { result: SearchResult; username: stri
 
   return (
     <div
-      className={`search-results__card group relative rounded-lg border p-4 transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
+      className={`search-results__card group relative min-w-0 rounded-lg border p-4 transition-all ${config.borderColor} ${config.bgColor} hover:border-primary/50`}
     >
       <div className="search-results__card-header flex items-start justify-between gap-2">
         <div className="search-results__card-content min-w-0 flex-1">

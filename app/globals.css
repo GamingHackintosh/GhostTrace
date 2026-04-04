@@ -167,3 +167,17 @@
     cursor: none;
   }
 }
+
+@media (max-width: 640px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .home-header__nav,
+  .search-results__filters,
+  .search-results__stats,
+  .username-search__legend {
+    overflow-wrap: anywhere;
+  }
+}

@@ -26,40 +26,40 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
   )
 
   return (
-    <div className="username-search flex flex-col items-center gap-8">
-      <div className="username-search__title-group flex items-center gap-3">
+    <div className="username-search flex flex-col items-center gap-6 sm:gap-8">
+      <div className="username-search__title-group flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
         <div className="username-search__logo-wrap relative">
           <Ghost className="h-10 w-10 text-primary" />
           <div className="username-search__logo-glow absolute inset-0 -z-10 bg-primary/30 blur-lg" />
         </div>
-        <h1 className="username-search__title text-4xl font-bold tracking-tight">
+        <h1 className="username-search__title text-3xl font-bold tracking-tight sm:text-4xl">
           Ghost<span className="text-primary">Trace</span>
         </h1>
       </div>
       
-      <p className="username-search__description max-w-md text-center text-muted-foreground">
+      <p className="username-search__description max-w-md px-2 text-center text-sm text-muted-foreground sm:text-base">
         {language === "ru"
           ? "OSINT-анализ username. Введите имя пользователя, чтобы проследить цифровые следы по платформам."
           : "OSINT Username Intelligence. Enter a username to trace digital footprints across platforms."}
       </p>
 
       <form onSubmit={handleSubmit} className="username-search__form w-full max-w-lg">
-        <div className="username-search__controls relative flex gap-2">
-          <div className="username-search__input-wrap relative flex-1">
+        <div className="username-search__controls relative flex flex-col gap-2 sm:flex-row">
+          <div className="username-search__input-wrap relative w-full flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
               placeholder={language === "ru" ? "Введите username..." : "Enter username..."}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="pl-10 h-12 bg-secondary/50 border-border/50 focus:border-primary font-mono"
+              className="h-12 w-full bg-secondary/50 pl-10 font-mono border-border/50 focus:border-primary"
               disabled={isSearching}
             />
           </div>
           <Button 
             type="submit" 
             size="lg"
-            className="h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="h-12 w-full bg-primary px-6 text-primary-foreground hover:bg-primary/90 sm:w-auto"
             disabled={!username.trim() || isSearching}
           >
             {isSearching ? (
@@ -74,7 +74,7 @@ export function UsernameSearch({ onSearch, isSearching }: UsernameSearchProps) {
         </div>
       </form>
 
-      <div className="username-search__legend flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="username-search__legend flex flex-wrap justify-center gap-x-4 gap-y-2 px-2 text-xs text-muted-foreground">
         <span className="username-search__legend-item flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-success" />
           {language === "ru" ? "Найден" : "Found"}
