@@ -26,7 +26,7 @@ export default function SmoothScroll() {
 
     return () => {
       lenis.destroy()
-      cancelAnimationFrame(rafId) // Хорошая практика — отменять анимацию
+      cancelAnimationFrame(rafId)
     }
   }, [])
 
