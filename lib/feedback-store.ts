@@ -4,9 +4,11 @@ import path from "node:path"
 
 export type ReviewState = "pending" | "approved" | "rejected"
 export type OverrideStatus = "found" | "not_found" | "unsupported"
+export type TicketStatus = "open" | "in_review" | "resolved" | "rejected"
 
 export interface FeedbackEntry {
   id: string
+  ticketNumber: string
   username: string
   platform: string
   currentStatus: string
@@ -14,6 +16,7 @@ export interface FeedbackEntry {
   note: string
   proofUrl: string
   createdAt: string
+  ticketStatus: TicketStatus
   reviewState: ReviewState
   reviewNotes: string
   reviewedAt: string | null
@@ -56,8 +59,33 @@ async function writeJsonFile<T>(filePath: string, value: T) {
   await writeFile(filePath, JSON.stringify(value, null, 2), "utf8")
 }
 
+function normalizeFeedbackEntry(entry: Partial<FeedbackEntry>, index: number): FeedbackEntry {
+  return {
+    id: entry.id || randomUUID(),
+    ticketNumber: entry.ticketNumber || `GHT-${String(index + 1).padStart(4, "0")}`,
+    username: entry.username || "",
+    platform: entry.platform || "",
+    currentStatus: entry.currentStatus || "",
+    suggestedStatus: entry.suggestedStatus || "found",
+    note: entry.note || "",
+    proofUrl: entry.proofUrl || "",
+    createdAt: entry.createdAt || new Date().toISOString(),
+    ticketStatus:
+      entry.ticketStatus ||
+      (entry.reviewState === "approved"
+        ? "resolved"
+        : entry.reviewState === "rejected"
+          ? "rejected"
+          : "open"),
+    reviewState: entry.reviewState || "pending",
+    reviewNotes: entry.reviewNotes || "",
+    reviewedAt: entry.reviewedAt || null,
+  }
+}
+
 export async function listFeedbackEntries() {
-  return readJsonFile<FeedbackEntry[]>(feedbackFile, [])
+  const entries = await readJsonFile<Partial<FeedbackEntry>[]>(feedbackFile, [])
+  return entries.map(normalizeFeedbackEntry)
 }
 
 export async function listOverrides() {
@@ -73,9 +101,11 @@ export async function createFeedbackEntry(input: {
   proofUrl?: string
 }) {
   const entries = await listFeedbackEntries()
+  const nextTicketNumber = `GHT-${String(entries.length + 1).padStart(4, "0")}`
 
   const entry: FeedbackEntry = {
     id: randomUUID(),
+    ticketNumber: nextTicketNumber,
     username: input.username.trim(),
     platform: input.platform.trim(),
     currentStatus: input.currentStatus.trim(),
@@ -83,6 +113,7 @@ export async function createFeedbackEntry(input: {
     note: input.note?.trim() ?? "",
     proofUrl: input.proofUrl?.trim() ?? "",
     createdAt: new Date().toISOString(),
+    ticketStatus: "open",
     reviewState: "pending",
     reviewNotes: "",
     reviewedAt: null,
@@ -92,6 +123,11 @@ export async function createFeedbackEntry(input: {
   await writeJsonFile(feedbackFile, entries)
 
   return entry
+}
+
+export async function getFeedbackEntryById(feedbackId: string) {
+  const entries = await listFeedbackEntries()
+  return entries.find((entry) => entry.id === feedbackId) ?? null
 }
 
 export async function getPlatformOverride(username: string, platform: string) {
@@ -110,7 +146,7 @@ export async function getPlatformOverride(username: string, platform: string) {
 
 export async function reviewFeedbackEntry(input: {
   feedbackId: string
-  action: "approve" | "reject"
+  action: "start_review" | "reopen" | "approve" | "reject"
   finalStatus?: OverrideStatus
   reviewNotes?: string
 }) {
@@ -125,8 +161,33 @@ export async function reviewFeedbackEntry(input: {
   const entry = entries[entryIndex]
   const reviewedAt = new Date().toISOString()
 
+  if (input.action === "start_review") {
+    entries[entryIndex] = {
+      ...entry,
+      ticketStatus: "in_review",
+      reviewNotes: input.reviewNotes?.trim() ?? entry.reviewNotes,
+    }
+
+    await writeJsonFile(feedbackFile, entries)
+    return entries[entryIndex]
+  }
+
+  if (input.action === "reopen") {
+    entries[entryIndex] = {
+      ...entry,
+      ticketStatus: "open",
+      reviewState: "pending",
+      reviewNotes: input.reviewNotes?.trim() ?? "",
+      reviewedAt: null,
+    }
+
+    await writeJsonFile(feedbackFile, entries)
+    return entries[entryIndex]
+  }
+
   entries[entryIndex] = {
     ...entry,
+    ticketStatus: input.action === "approve" ? "resolved" : "rejected",
     reviewState: input.action === "approve" ? "approved" : "rejected",
     reviewNotes: input.reviewNotes?.trim() ?? "",
     reviewedAt,

@@ -6,6 +6,7 @@ import { UsernameSearch } from "@/components/username-search"
 import { SearchResults, SearchResult, ResultStatus } from "@/components/search-results"
 import { platforms } from "@/lib/platforms"
 import { checkPlatform } from "@/lib/check-platform"
+import { getClientOverride } from "@/lib/client-ticket-store"
 import { Ghost } from "lucide-react"
 
 export default function HomePage() {
@@ -29,6 +30,16 @@ export default function HomePage() {
     const nextResults = await Promise.all(
       platforms.map(async (platform) => {
         const url = platform.urlTemplate.replace("{username}", username)
+        const override = getClientOverride(username, platform.name)
+
+        if (override) {
+          return {
+            platform: platform.name,
+            category: platform.category,
+            url,
+            status: override.status as ResultStatus,
+          }
+        }
 
         try {
           const data = await checkPlatform(url, platform.name, username, platform.checkMethod)

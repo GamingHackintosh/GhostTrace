@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { loginAdmin } from "@/lib/client-ticket-store"
 
 export function AdminLoginForm() {
   const router = useRouter()
@@ -18,15 +19,7 @@ export function AdminLoginForm() {
     setError("")
 
     try {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      })
-
-      if (!response.ok) {
+      if (!loginAdmin(username, password)) {
         throw new Error("Invalid credentials")
       }
 

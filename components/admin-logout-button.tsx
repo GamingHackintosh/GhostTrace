@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { logoutAdmin } from "@/lib/client-ticket-store"
 
 export function AdminLogoutButton() {
   const router = useRouter()
 
   async function handleLogout() {
-    await fetch("/api/admin/logout", { method: "POST" })
+    logoutAdmin()
     router.push("/admin/login")
     router.refresh()
   }

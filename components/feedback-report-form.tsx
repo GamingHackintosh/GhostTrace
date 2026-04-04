@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import type { ResultStatus } from "@/components/search-results"
+import { createClientTicket } from "@/lib/client-ticket-store"
 
 interface FeedbackReportFormProps {
   username: string
@@ -31,24 +32,14 @@ export function FeedbackReportForm({
     setError("")
 
     try {
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          platform,
-          currentStatus,
-          suggestedStatus,
-          note,
-          proofUrl,
-        }),
+      createClientTicket({
+        username,
+        platform,
+        currentStatus,
+        suggestedStatus,
+        note,
+        proofUrl,
       })
-
-      if (!response.ok) {
-        throw new Error("Feedback request failed")
-      }
 
       setSubmitted(true)
       setNote("")
