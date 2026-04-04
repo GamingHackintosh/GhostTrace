@@ -5,7 +5,7 @@ import { useState } from "react"
 import { useLanguage } from "@/components/language-provider"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { reviewClientTicket, type TicketStatus } from "@/lib/client-ticket-store"
+import { deleteClientTicket, reviewClientTicket, type TicketStatus } from "@/lib/client-ticket-store"
 
 interface AdminFeedbackActionsProps {
   feedbackId: string
@@ -52,6 +52,31 @@ export function AdminFeedbackActions({
     }
   }
 
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      language === "ru"
+        ? "Удалить этот тикет из очереди? Это действие нельзя отменить."
+        : "Delete this ticket from the queue? This action cannot be undone."
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setError("")
+
+    try {
+      deleteClientTicket(feedbackId)
+      onUpdated?.()
+      router.refresh()
+    } catch {
+      setError(language === "ru" ? "Не удалось удалить тикет." : "Could not delete the ticket.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="space-y-3">
       <Textarea
@@ -90,6 +115,9 @@ export function AdminFeedbackActions({
         </Button>
         <Button size="sm" variant="destructive" onClick={() => submitReview("reject")} disabled={isSubmitting}>
           {language === "ru" ? "Отклонить" : "Reject"}
+        </Button>
+        <Button size="sm" variant="ghost" onClick={handleDelete} disabled={isSubmitting}>
+          {language === "ru" ? "Удалить тикет" : "Delete ticket"}
         </Button>
       </div>
     </div>

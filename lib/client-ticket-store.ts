@@ -316,6 +316,17 @@ export function reviewClientTicket(input: {
   return tickets[ticketIndex]
 }
 
+export function deleteClientTicket(ticketId: string) {
+  const tickets = listClientTickets()
+  const nextTickets = tickets.filter((ticket) => ticket.id !== ticketId)
+
+  if (nextTickets.length === tickets.length) {
+    throw new Error("Ticket not found")
+  }
+
+  writeJson(TICKETS_KEY, nextTickets)
+}
+
 export function getClientOverride(username: string, platform: string) {
   const overrides = listClientOverrides()
 
