@@ -30,8 +30,8 @@ export function AdminLoginForm() {
     } catch {
       setError(
         language === "ru"
-          ? "Неверный логин или пароль. На localhost используйте admin / admin."
-          : "Invalid login or password. Use admin / admin on localhost."
+          ? "Неверный логин или пароль."
+          : "Invalid login or password."
       )
     } finally {
       setIsSubmitting(false)
