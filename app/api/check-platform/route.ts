@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getPlatformOverride } from "@/lib/feedback-store"
+import { runHeuristicPlatformCheck } from "@/lib/heuristic-platform-check"
 
 async function checkByHeadStatus(url: string) {
   const response = await fetch(url, {
@@ -53,11 +54,9 @@ export async function POST(request: NextRequest) {
 
     if (checkMethod === "unsupported") {
       return NextResponse.json({
-        exists: false,
+        ...runHeuristicPlatformCheck(url, platform, username),
         url,
         platform,
-        checked: false,
-        unsupported: true,
       })
     }
 

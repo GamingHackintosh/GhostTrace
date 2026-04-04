@@ -1,5 +1,7 @@
 type CheckMethod = "github-api" | "head-status" | "unsupported"
 
+import { runHeuristicPlatformCheck } from "@/lib/heuristic-platform-check"
+
 export async function checkPlatform(
   url: string,
   platform: string,
@@ -31,7 +33,11 @@ export async function checkPlatform(
     return await response.json()
   } catch {
     if (checkMethod === "unsupported") {
-      return { exists: false, url, platform, checked: false, unsupported: true }
+      return {
+        ...runHeuristicPlatformCheck(url, platform, username),
+        url,
+        platform,
+      }
     }
 
     if (checkMethod === "github-api") {
