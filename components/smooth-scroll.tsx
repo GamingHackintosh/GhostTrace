@@ -14,7 +14,6 @@ export default function SmoothScroll() {
       wheelMultiplier: 1,      // Вместо mouseMultiplier
       touchMultiplier: 2,
       infinite: false,
-      // smooth: true — УДАЛЕНО (плавность включена по умолчанию)
     })
 
     function raf(time: number) {
