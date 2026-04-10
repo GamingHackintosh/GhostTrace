@@ -1,0 +1,50 @@
+cat > .gitignore << 'EOF'
+# IDE и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.temp
+
+# Сборки и зависимости (если проект компилируемый)
+/build/
+/dist/
+node_modules/
+/out/
+/app/
+/data/
+__pycache__/
+*.pyc
+*.pyo
+.next/
+
+# Файлы окружения
+.env
+.env.local
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Игровые ассеты (если генерируются)
+*.cache
+*.tmp_asset
+
+# Игнорировать бинарники и архивы (если есть)
+*.exe
+*.dll
+*.so
+*.dylib
+*.zip
+*.tar.gz
+EOF.next/
